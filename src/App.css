@@ -28,9 +28,16 @@
 
 .Keyboard {}
 
-.hg-theme-default .hg-button {
-    height: 75px; /* Hack the keyboard lib because I need these to be bigger */
+/*Hack the keyboard lib because I need these to be bigger */
+.hg-row {
+    margin-bottom: 10px !important;
 }
+
+.hg-theme-default .hg-button {
+    height: 75px !important;
+    margin-right: 10px;
+}
+
 
 .App-link {
     color: #61dafb;
