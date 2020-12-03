@@ -10,12 +10,13 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {working: ''};
+    this.state = {working: '', keyboard: null};
 
     this.onChange = this.onChange.bind(this);
     this.onChangeEvent = this.onChangeEvent.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onClickCopy = this.onClickCopy.bind(this);
+
   }
 
   /**
@@ -24,8 +25,9 @@ class App extends React.Component {
    * @param {string} input param passed by keyboard component 
    */
   onChange(input) {
-    let last = input.charAt(input.length - 1)
-    this.setState({working: this.state.working + last});
+    console.log(input)
+    this.setState({working: this.state.working + input});
+    this.state.keyboard.clearInput()
   }
 
   /** 
@@ -40,7 +42,7 @@ class App extends React.Component {
    * @param {string} input key pressed on keyboard
    */
   onKeyPress(input) {
-    console.log("Keypress", input);
+    // console.log("Keypress", input);
   }
 
   /**
@@ -61,18 +63,18 @@ class App extends React.Component {
         <div className="App">
           <header className="App-header">
             <p>
-              Eyetracking Keyboard
+              {this.state.working || "Eyetracking Keyboard"}
             </p>
             <form>
               {/* Text input for working string */}
               <input type="text" value={this.state.working} onChange={this.onChangeEvent} name="workingstring"></input>
               {' '}
               {/* Copy to clipboard button */}
-              <Button variant="danger" onClick={this.onClickCopy}>Clip</Button>
+              <Button variant="primary" onClick={this.onClickCopy}>Clip</Button>
             </form>
           </header>
           <div className="Keyboard-wrapper">
-            <Keyboard className="Keyboard" onChange={this.onChange} onKeyPress={this.onKeyPress}/>
+            <Keyboard className="Keyboard" keyboardRef={r => (this.state.keyboard = r)} onChange={this.onChange} onKeyPress={this.onKeyPress}/>
           </div>
         </div>
   );
