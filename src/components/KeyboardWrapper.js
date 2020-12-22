@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
@@ -10,9 +10,32 @@ const KeyboardWrapper = () => {
   const [layout, setLayout] = useState("default");
   const keyboard = useRef();
 
+  useEffect(() => {
+    window.addEventListener('resize', getKeyDimensions);
+    getKeyDimensions();
+  }, []);
+
+  const getKeyDimensions = () => {
+    let w = window.outerWidth;
+    let h = window.outerHeight;
+    let keyDimensions = [];
+    keyboard.current.recurseButtons(buttonElement => {
+      keyDimensions.push({
+        id: keyDimensions.length,
+        key: buttonElement.innerText,
+        x: buttonElement.offsetLeft,
+        y: buttonElement.offsetTop,
+        width: buttonElement.offsetWidth,
+        height: buttonElement.offsetHeight
+      });
+    });
+    console.log(`Screen ${w}x${h}`);
+    console.log(keyDimensions);
+  }
+
   const onChange = input => {
     setInput(input);
-    console.log("Input changed ", input);
+    // console.log("Input changed ", input);
   };
 
   const handleShift = () => {
@@ -21,7 +44,7 @@ const KeyboardWrapper = () => {
   };
 
   const onKeyPress = button => {
-    console.log("Button pressed", button);
+    // console.log("Button pressed", button);
 
     if (button === "{shift}" || button === "{lock}") {
       handleShift();
@@ -48,8 +71,6 @@ const KeyboardWrapper = () => {
         onChange={onChange}
         onKeyPress={onKeyPress}
         physicalKeyboardHighlight={true}
-
-
       />
 
     </div>
