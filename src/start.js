@@ -8,10 +8,11 @@ let mainWindow
 // Electron window params, we can config this to better fit the use of our app.
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1920,
+    height: 1080,
     webPreferences: {
       nodeIntegration: true,
+      nodeIntegrationInWorker: true
     },
   })
 
@@ -43,3 +44,7 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+const Screen = require("eyetracking");
+
+let s = new Screen(1920, 1080);
