@@ -44,7 +44,3 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
-const Screen = require("eyetracking");
-
-let s = new Screen(1920, 1080);
