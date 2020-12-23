@@ -5,14 +5,22 @@ import 'react-simple-keyboard/build/css/index.css';
 
 import "../styles/KeyboardWrapper.css";
 
+import worker from 'workerize-loader!../workers/eyetracking' // eslint-disable-line import/no-webpack-loader-syntax
+
 const KeyboardWrapper = () => {
   const [input, setInput] = useState("");
   const [layout, setLayout] = useState("default");
   const keyboard = useRef();
+  let eyetrackingInstance = worker();
 
   useEffect(() => {
     window.addEventListener('resize', getKeyDimensions);
-    getKeyDimensions();
+    eyetrackingInstance.addEventListener('message', onKeyFocus);
+
+    let screenMeta = getKeyDimensions();
+    eyetrackingInstance.newScreen(screenMeta.width, screenMeta.height);
+    eyetrackingInstance.addRectangles(screenMeta.rectangles);
+
   }, []);
 
   const getKeyDimensions = () => {
@@ -31,6 +39,16 @@ const KeyboardWrapper = () => {
     });
     console.log(`Screen ${w}x${h}`);
     console.log(keyDimensions);
+
+    return {
+      width: w,
+      height: h,
+      rectangles: keyDimensions
+    };
+  }
+
+  const onKeyFocus = message => {
+    console.log("New message: ", message.data);
   }
 
   const onChange = input => {

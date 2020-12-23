@@ -5,14 +5,12 @@ import App from './App';
 
 import worker from 'workerize-loader!./workers/eyetracking' // eslint-disable-line import/no-webpack-loader-syntax
 
-const workerInstance = worker()
-// Attach an event listener to receive calculations from your worker
-workerInstance.addEventListener('message', (message) => {
-  console.log('New Message: ', message.data)
-})
+// const eyetrackerInstance = worker()
 
-// Run your calculations
-workerInstance.calculatePrimes(500, 1000000000)
+// eyetrackerInstance.addEventListener('message', (message) => {
+//   console.log('New Message: ', message.data)
+// });
+
 
 ReactDOM.render(
   <React.StrictMode>
