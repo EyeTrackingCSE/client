@@ -7,6 +7,7 @@ let mainWindow
 
 // Electron window params, we can config this to better fit the use of our app.
 function createWindow() {
+  
   mainWindow = new BrowserWindow({
     width: 1920,
     height: 1080,

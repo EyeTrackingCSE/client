@@ -25,3 +25,12 @@ tryConnection()
 client.on('error', () => {
   setTimeout(tryConnection, 1000)
 })
+
+const eyetracking = require('eyetracking');
+
+console.log(eyetracking);
+
+
+let screen = new eyetracking(1920, 1080);
+
+console.log('hello world');

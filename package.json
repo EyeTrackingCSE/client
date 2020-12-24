@@ -32,7 +32,8 @@
     "react-start": "react-scripts start",
     "pack": "build --dir",
     "dist": "npm run build && build",
-    "postinstall": "install-app-deps"
+    "postinstall": "install-app-deps",
+    "rebuild-eyetracking": "cd ./node_modules/eyetracking/cpp && set HOME=~/.electron-gyp && node-gyp rebuild --target=10.1.4 --arch=x64 --dist-url=https://electronjs.org/headers"
   },
   "eslintConfig": {
     "extends": "react-app"
