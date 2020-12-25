@@ -8,8 +8,9 @@ const {
   ASYNC_LISTEN,
   SYNC_SET_NEW_SCREEN,
   OK,
-  ERROR, 
-  SYNC_SET_SCREEN_SPACE} = require('./constants/index');
+  ERROR,
+  SYNC_SET_SCREEN_SPACE
+} = require('./constants/index');
 
 let mainWindow
 
@@ -62,7 +63,7 @@ app.on('activate', () => {
  * Actually creates a new eyetracking instance, so old data is disregarded.
  * Pushes keys to node-gyp module.
  */
-ipcMain.on(SYNC_SET_SCREEN_SPACE, (event, arg) => {
+ipcMain.on(SYNC_SET_NEW_SCREEN, (event, arg) => {
   if (!arg.rectangles.length) {
     event.returnValue = ERROR;
     return;
@@ -105,20 +106,9 @@ ipcMain.on(ASYNC_LISTEN, (event, arg) => {
     return;
   }
 
-  // On focus, update the render process.
-  screen.listen((id, hasFocus, timeStamp) => {
-    event.reply(ASYNC_GAZE_FOCUS_EVENT, {id, hasFocus, timeStamp});
+  screen.Listen((id, hasFocus, timeStamp) => {
+    event.reply(ASYNC_GAZE_FOCUS_EVENT, id);
   });
+
 });
 
-// Deprecated. Will remove 
-// ipcMain.on('asynchronous-message', (event, arg) => {
-//   console.log(arg) // prints "ping"
-//   let count = 0;
-//   while (count < 5) {
-//     setTimeout(() => {
-//       event.reply(`asynchronous-reply`, `pong ${new Date()}`);
-//     }, 5000);
-//     count++;
-//   }
-// })

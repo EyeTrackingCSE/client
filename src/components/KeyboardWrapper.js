@@ -10,8 +10,6 @@ import {
   SYNC_SET_NEW_SCREEN,
   ASYNC_LISTEN,
   ERROR,
-  OK,
-  SYNC_SET_SCREEN_SPACE
 } from "../constants/index";
 
 const { ipcRenderer } = window.require("electron");
@@ -47,8 +45,6 @@ const KeyboardWrapper = () => {
         height: buttonElement.offsetHeight
       });
     });
-    console.log(`Screen ${w}x${h}`);
-    console.log(keyDimensions);
 
     return {
       width: w,
@@ -67,11 +63,13 @@ const KeyboardWrapper = () => {
    */
   const setKeyDimensions = () => {
     let dims = getKeyDimensions();
-    let returnVal = ipcRenderer.sendSync(SYNC_SET_SCREEN_SPACE, dims);
-
+    let returnVal = ipcRenderer.sendSync(SYNC_SET_NEW_SCREEN, dims);
+    console.log('returnVal', returnVal);
     if (returnVal === ERROR) {
       throw new Error("Something went wrong extracting keyboard regions.");
     }
+
+    console.log(dims);
 
     // Start Tobii listen loop
     ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
@@ -83,8 +81,8 @@ const KeyboardWrapper = () => {
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
-  const onGazeFocusEvent = (event, arg) => {
-    console.log(arg);
+  const onGazeFocusEvent = (event, args) => {
+    console.log(args);
   }
 
   /**
