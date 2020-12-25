@@ -7,6 +7,12 @@ import "../styles/KeyboardWrapper.css";
 
 import * as constants from "../constants/index";
 
+import {
+  ASYNC_GAZE_FOCUS_EVENT,
+  SET_GAZE_FOCUS_REGIONS,
+  ASYNC_LISTEN, ERROR, OK
+} from "../constants/index";
+
 const { ipcRenderer } = window.require("electron");
 
 const KeyboardWrapper = () => {
@@ -16,7 +22,7 @@ const KeyboardWrapper = () => {
 
   useEffect(() => {
     window.addEventListener('resize', setKeyDimensions);
-    ipcRenderer.on(constants.ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
+    ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
 
     // ipcRenderer.sendSync('asynchronous-message', 'ping')
     // ipcRenderer.on('asynchronous-reply', (event, arg) => {
@@ -50,15 +56,15 @@ const KeyboardWrapper = () => {
 
   const setKeyDimensions = () => {
     let dims = getKeyDimensions();
-    let returnVal = ipcRenderer.sendSync(constants.SET_GAZE_FOCUS_REGIONS, dims);
+    let returnVal = ipcRenderer.sendSync(SET_GAZE_FOCUS_REGIONS, dims);
 
     if (returnVal === 1) {
       throw new Error("Something went wrong extracting keyboard regions.");
     }
 
     // Start Tobii listen loop
-    ipcRenderer.send(constants.ASYNC_LISTEN, 1);
-    
+    ipcRenderer.send(ASYNC_LISTEN, 1);
+
   }
 
   const onGazeFocusEvent = (event, arg) => {

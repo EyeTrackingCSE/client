@@ -3,7 +3,8 @@ const eyetracking = require('eyetracking');
 const path = require('path')
 const url = require('url')
 
-const { ASYNC_GAZE_FOCUS_EVENT,
+const {
+  ASYNC_GAZE_FOCUS_EVENT,
   ASYNC_LISTEN,
   SYNC_SET_SCREEN_SPACE,
   OK,

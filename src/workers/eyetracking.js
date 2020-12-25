@@ -1,3 +1,7 @@
+/**
+ * Deprecated, will remove
+ */
+
 const eyetracking = require('eyetracking');
 
 let screen;
