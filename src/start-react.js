@@ -1,6 +1,5 @@
 const net = require('net')
 const childProcess = require('child_process')
-
 const port = process.env.PORT ? process.env.PORT - 100 : 3000
 
 process.env.ELECTRON_START_URL = `http://localhost:${port}`
@@ -26,11 +25,4 @@ client.on('error', () => {
   setTimeout(tryConnection, 1000)
 })
 
-const eyetracking = require('eyetracking');
 
-console.log(eyetracking);
-
-
-let screen = new eyetracking(1920, 1080);
-
-console.log('hello world');

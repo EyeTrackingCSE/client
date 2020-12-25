@@ -1,13 +1,17 @@
-const { app, BrowserWindow } = require('electron')
-
+const { app, BrowserWindow, ipcMain } = require('electron')
+const eyetracking = require('eyetracking');
 const path = require('path')
 const url = require('url')
 
+const constants = require('./constants/index');
+
 let mainWindow
+
+let screen = null;
 
 // Electron window params, we can config this to better fit the use of our app.
 function createWindow() {
-  
+
   mainWindow = new BrowserWindow({
     width: 1920,
     height: 1080,
@@ -20,11 +24,11 @@ function createWindow() {
   // Load html from environment variable, else from html dist file.
   mainWindow.loadURL(
     process.env.ELECTRON_START_URL ||
-      url.format({
-        pathname: path.join(__dirname, '/../public/index.html'),
-        protocol: 'file:',
-        slashes: true,
-      })
+    url.format({
+      pathname: path.join(__dirname, '/../public/index.html'),
+      protocol: 'file:',
+      slashes: true,
+    })
   )
 
   mainWindow.on('closed', () => {
@@ -45,3 +49,64 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+/**
+ * Takes an object containing width, height, and an array of objects denoting
+ * screen space coordinates for each key on virtual keyboard
+ * 
+ * Actually creates a new eyetracking instance, so old data is disregarded.
+ * Pushes keys to node-gyp module.
+ */
+ipcMain.on(constants.SYNC_SET_GAZE_FOCUS_REGIONS, (event, arg) => {
+  if (!arg.rectangles.length) {
+    event.returnValue = constants.ERROR;
+    return;
+  }
+
+  screen = new eyetracking(arg.width, arg.height);
+  screen.AddRectangles(arg.rectangles);
+  event.returnValue = constants.OK;
+});
+
+/**
+ * Sets only the screen space size of the monitor.
+ */
+ipcMain.on(constants.SYNC_SET_SCREEN_SPACE, (event, arg) => {
+  if (screen === null) {
+    event.returnValue = constants.ERROR;
+    return;
+  }
+
+  if (!arg.height || !arg.width) {
+    event.returnValue = constants.ERROR;
+    return;
+  }
+
+  screen.SetWidth(arg.width);
+  screen.SetHeight(arg.height);
+
+  event.returnValue = constants.OK;
+});
+
+/**
+ * Kicks off the tobii.listen() loop.
+ * 
+ * Each time the eyetracking recognizes a new focus event,
+ * the metadata of said event to emitted to the renderer process
+ * using a event.reply() call. 
+ */
+ipcMain.on(constants.ASYNC_LISTEN, (event, arg) => {
+
+});
+
+// Deprecated. Will remove 
+// ipcMain.on('asynchronous-message', (event, arg) => {
+//   console.log(arg) // prints "ping"
+//   let count = 0;
+//   while (count < 5) {
+//     setTimeout(() => {
+//       event.reply(`asynchronous-reply`, `pong ${new Date()}`);
+//     }, 5000);
+//     count++;
+//   }
+// })

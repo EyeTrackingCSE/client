@@ -5,13 +5,23 @@ import 'react-simple-keyboard/build/css/index.css';
 
 import "../styles/KeyboardWrapper.css";
 
+import * as constants from "../constants/index";
+
+const { ipcRenderer } = window.require("electron");
+
 const KeyboardWrapper = () => {
   const [input, setInput] = useState("");
   const [layout, setLayout] = useState("default");
   const keyboard = useRef();
 
   useEffect(() => {
-    window.addEventListener('resize', getKeyDimensions);
+    window.addEventListener('resize', setKeyDimensions);
+    ipcRenderer.on(constants.ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
+
+    // ipcRenderer.sendSync('asynchronous-message', 'ping')
+    // ipcRenderer.on('asynchronous-reply', (event, arg) => {
+    //   console.log(arg) // prints "pong"
+    // })
   }, []);
 
   const getKeyDimensions = () => {
@@ -38,8 +48,21 @@ const KeyboardWrapper = () => {
     };
   }
 
-  const onKeyFocus = message => {
-    console.log("New message: ", message.data);
+  const setKeyDimensions = () => {
+    let dims = getKeyDimensions();
+    let returnVal = ipcRenderer.sendSync(constants.SET_GAZE_FOCUS_REGIONS, dims);
+
+    if (returnVal === 1) {
+      throw new Error("Something went wrong extracting keyboard regions.");
+    }
+
+    // Start Tobii listen loop
+    ipcRenderer.send(constants.ASYNC_LISTEN, 1);
+    
+  }
+
+  const onGazeFocusEvent = (event, arg) => {
+
   }
 
   const onChange = input => {
