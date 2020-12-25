@@ -6,9 +6,10 @@ const url = require('url')
 const {
   ASYNC_GAZE_FOCUS_EVENT,
   ASYNC_LISTEN,
-  SYNC_SET_SCREEN_SPACE,
+  SYNC_SET_NEW_SCREEN,
   OK,
-  ERROR } = require('./constants/index');
+  ERROR, 
+  SYNC_SET_SCREEN_SPACE} = require('./constants/index');
 
 let mainWindow
 
@@ -61,7 +62,7 @@ app.on('activate', () => {
  * Actually creates a new eyetracking instance, so old data is disregarded.
  * Pushes keys to node-gyp module.
  */
-ipcMain.on(SYNC_SET_GAZE_FOCUS_REGIONS, (event, arg) => {
+ipcMain.on(SYNC_SET_SCREEN_SPACE, (event, arg) => {
   if (!arg.rectangles.length) {
     event.returnValue = ERROR;
     return;

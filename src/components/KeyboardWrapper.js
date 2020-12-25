@@ -7,8 +7,11 @@ import "../styles/KeyboardWrapper.css";
 
 import {
   ASYNC_GAZE_FOCUS_EVENT,
-  SET_GAZE_FOCUS_REGIONS,
-  ASYNC_LISTEN, ERROR, OK
+  SYNC_SET_NEW_SCREEN,
+  ASYNC_LISTEN,
+  ERROR,
+  OK,
+  SYNC_SET_SCREEN_SPACE
 } from "../constants/index";
 
 const { ipcRenderer } = window.require("electron");
@@ -64,7 +67,7 @@ const KeyboardWrapper = () => {
    */
   const setKeyDimensions = () => {
     let dims = getKeyDimensions();
-    let returnVal = ipcRenderer.sendSync(SET_GAZE_FOCUS_REGIONS, dims);
+    let returnVal = ipcRenderer.sendSync(SYNC_SET_SCREEN_SPACE, dims);
 
     if (returnVal === 1) {
       throw new Error("Something went wrong extracting keyboard regions.");
