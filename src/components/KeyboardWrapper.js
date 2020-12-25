@@ -69,14 +69,13 @@ const KeyboardWrapper = () => {
     let dims = getKeyDimensions();
     let returnVal = ipcRenderer.sendSync(SYNC_SET_SCREEN_SPACE, dims);
 
-    if (returnVal === 1) {
+    if (returnVal === ERROR) {
       throw new Error("Something went wrong extracting keyboard regions.");
     }
 
     // Start Tobii listen loop
-    ipcRenderer.send(ASYNC_LISTEN, 1);
-
     ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
+    ipcRenderer.send(ASYNC_LISTEN, 1);
   }
 
   /**
@@ -85,7 +84,7 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, arg) => {
-
+    console.log(arg);
   }
 
   /**

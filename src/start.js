@@ -101,7 +101,14 @@ ipcMain.on(SYNC_SET_SCREEN_SPACE, (event, arg) => {
  * using a event.reply() call. 
  */
 ipcMain.on(ASYNC_LISTEN, (event, arg) => {
+  if (screen === null) {
+    return;
+  }
 
+  // On focus, update the render process.
+  screen.listen((id, hasFocus, timeStamp) => {
+    event.reply(ASYNC_GAZE_FOCUS_EVENT, {id, hasFocus, timeStamp});
+  });
 });
 
 // Deprecated. Will remove 
