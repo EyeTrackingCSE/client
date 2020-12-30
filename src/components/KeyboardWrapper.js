@@ -7,9 +7,7 @@ import "../styles/KeyboardWrapper.css";
 
 import {
   ASYNC_GAZE_FOCUS_EVENT,
-  SYNC_SET_NEW_SCREEN,
   ASYNC_LISTEN,
-  ERROR,
 } from "../constants/index";
 
 const { ipcRenderer } = window.require("electron");
@@ -18,14 +16,6 @@ const KeyboardWrapper = () => {
   const [input, setInput] = useState("");
   const [layout, setLayout] = useState("default");
   const keyboard = useRef();
-
-  /**
-   * Gets called when component mounts
-   * Just binds the 'resize' event to setKeyDimensions to update eyetracker
-   */
-  useEffect(() => {
-    window.addEventListener('resize', setKeyDimensions);
-  }, []);
 
   /**
    * Extracts width of screen, height of screen,
@@ -63,17 +53,12 @@ const KeyboardWrapper = () => {
    */
   const setKeyDimensions = () => {
     let dims = getKeyDimensions();
-    let returnVal = ipcRenderer.sendSync(SYNC_SET_NEW_SCREEN, dims);
-    console.log('returnVal', returnVal);
-    if (returnVal === ERROR) {
-      throw new Error("Something went wrong extracting keyboard regions.");
-    }
 
     console.log(dims);
 
     // Start Tobii listen loop
     ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
-    ipcRenderer.send(ASYNC_LISTEN, 1);
+    ipcRenderer.send(ASYNC_LISTEN, dims);
   }
 
   /**
@@ -82,6 +67,7 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
+    console.log("on gaze focus")
     console.log(args);
   }
 
@@ -125,6 +111,15 @@ const KeyboardWrapper = () => {
 
     keyboard.current.setInput(input);
   }
+
+  /**
+   * Gets called when component mounts
+   * Just binds the 'resize' event to setKeyDimensions to update eyetracker
+   */
+  useEffect(() => {
+    window.addEventListener('resize', setKeyDimensions);
+    setKeyDimensions();
+  }, []);
 
   return (
     <div>
