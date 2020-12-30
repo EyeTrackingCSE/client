@@ -14,7 +14,10 @@ const tryConnection = () => {
       console.log('starting electron')
       startedElectron = true
       const exec = childProcess.exec
-      exec('npm run electron')
+      let proc = exec('npm run electron')
+      proc.stdout.on('data', data=> {
+        console.log(data);
+      })
     }
   })
 }

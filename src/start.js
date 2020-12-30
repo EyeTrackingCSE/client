@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron')
 const eyetracking = require('eyetracking');
 const path = require('path')
 const url = require('url')
+const { fork } = require('child_process');
 
 const {
   ASYNC_GAZE_FOCUS_EVENT,
@@ -15,7 +16,7 @@ const {
 let mainWindow
 
 let screen = null;
-
+console.log(";LDSAJFASJFJF;LKJDSA")
 // Electron window params, we can config this to better fit the use of our app.
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -106,8 +107,18 @@ ipcMain.on(ASYNC_LISTEN, (event, arg) => {
     return;
   }
 
-  screen.Listen((id, hasFocus, timeStamp) => {
-    event.reply(ASYNC_GAZE_FOCUS_EVENT, id);
+  // screen.Listen((id, hasFocus, timeStamp) => {
+  //   event.reply(ASYNC_GAZE_FOCUS_EVENT, id);
+  // });
+
+  const node = fork(path.join(__dirname, 'eyetracking.js'), [], {
+    stdio: ['pipe', 'pipe', 'pipe', 'ipc']
+  });
+
+  node.send(arg);
+  node.on('message', (evt) => {
+    console.log(evt);
+    event.reply(ASYNC_GAZE_FOCUS_EVENT, evt.id);
   });
 
 });

@@ -73,7 +73,7 @@ const KeyboardWrapper = () => {
 
     // Start Tobii listen loop
     ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
-    ipcRenderer.send(ASYNC_LISTEN, 1);
+    ipcRenderer.send(ASYNC_LISTEN, dims);
   }
 
   /**
@@ -82,6 +82,7 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
+    console.log("on gaze focus")
     console.log(args);
   }
 
