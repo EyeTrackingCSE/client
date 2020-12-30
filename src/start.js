@@ -16,7 +16,6 @@ const {
 let mainWindow
 
 let screen = null;
-console.log(";LDSAJFASJFJF;LKJDSA")
 // Electron window params, we can config this to better fit the use of our app.
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -107,15 +106,15 @@ ipcMain.on(ASYNC_LISTEN, (event, arg) => {
     return;
   }
 
-  // screen.Listen((id, hasFocus, timeStamp) => {
-  //   event.reply(ASYNC_GAZE_FOCUS_EVENT, id);
-  // });
-
+  // fork a child process to run the eyetracking module
   const node = fork(path.join(__dirname, 'eyetracking.js'), [], {
     stdio: ['pipe', 'pipe', 'pipe', 'ipc']
   });
 
+  // Send the screen metadata
   node.send(arg);
+
+  // When the forked process emits a message, push to the render process
   node.on('message', (evt) => {
     console.log(evt);
     event.reply(ASYNC_GAZE_FOCUS_EVENT, evt.id);
