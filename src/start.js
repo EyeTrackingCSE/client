@@ -102,9 +102,8 @@ ipcMain.on(SYNC_SET_SCREEN_SPACE, (event, arg) => {
  * using a event.reply() call. 
  */
 ipcMain.on(ASYNC_LISTEN, (event, arg) => {
-  if (screen === null) {
-    return;
-  }
+
+  console.log("Forking eyetracking process");
 
   // fork a child process to run the eyetracking module
   const node = fork(path.join(__dirname, 'eyetracking.js'), [], {
