@@ -115,8 +115,12 @@ ipcMain.on(ASYNC_LISTEN, (event, arg) => {
 
   // When the forked process emits a message, push to the render process
   node.on('message', (evt) => {
-    console.log(evt);
-    event.reply(ASYNC_GAZE_FOCUS_EVENT, evt.id);
+    // something cursed
+    let payload = {
+      ...evt,
+      ...arg.rectangles[evt.id]
+    }
+    event.reply(ASYNC_GAZE_FOCUS_EVENT, payload);
   });
 
 });

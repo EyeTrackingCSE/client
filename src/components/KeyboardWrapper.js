@@ -17,6 +17,7 @@ const KeyboardWrapper = () => {
   const [layout, setLayout] = useState("default");
   const keyboard = useRef();
 
+
   /**
    * Extracts width of screen, height of screen,
    * and coordinates of key on virutal keyboard.
@@ -53,7 +54,6 @@ const KeyboardWrapper = () => {
    */
   const setKeyDimensions = () => {
     let dims = getKeyDimensions();
-
     console.log(dims);
 
     // Start Tobii listen loop
@@ -67,7 +67,6 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
-    console.log("on gaze focus")
     console.log(args);
   }
 
