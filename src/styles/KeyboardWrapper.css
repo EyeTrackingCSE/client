@@ -45,3 +45,13 @@ textarea:focus {
     margin-right: 10px;
     font-size: 25px;
 }
+
+.highlight-key {
+    background-color: rgb(218, 220, 228)
+
+}
+
+div:focus {
+    background-color: rgb(218, 220, 228)
+
+}
