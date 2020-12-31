@@ -3,5 +3,6 @@
  */
 module.exports = {
     ...require('./events'),
-    ...require('./status')
+    ...require('./status'),
+    ...require('./lettering')
 }
