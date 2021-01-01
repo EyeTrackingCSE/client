@@ -101,20 +101,28 @@ ipcMain.on(SYNC_SET_SCREEN_SPACE, (event, arg) => {
  * the metadata of said event to emitted to the renderer process
  * using a event.reply() call. 
  */
+let eyetrackingProcess;
 ipcMain.on(ASYNC_LISTEN, (event, arg) => {
 
-  console.log("Forking eyetracking process");
+  // Check if there is a currently running eyetracking process
+  // if so, murder it
+  if (eyetrackingProcess) {
+    console.log(`Killing eyetracking process (${eyetrackingProcess.pid || 'no pid found'})`);
+    eyetrackingProcess.kill('SIGINT');
+  }
 
   // fork a child process to run the eyetracking module
-  const node = fork(path.join(__dirname, 'eyetracking.js'), [], {
+  eyetrackingProcess = fork(path.join(__dirname, 'eyetracking.js'), [], {
     stdio: ['pipe', 'pipe', 'pipe', 'ipc']
   });
 
+  console.log(`Forking eyetracking process (${eyetrackingProcess.pid || 'no pid found'})`);
+
   // Send the screen metadata
-  node.send(arg);
+  eyetrackingProcess.send(arg);
 
   // When the forked process emits a message, push to the render process
-  node.on('message', (evt) => {
+  eyetrackingProcess.on('message', (evt) => {
     // something cursed
     let payload = {
       ...evt,
