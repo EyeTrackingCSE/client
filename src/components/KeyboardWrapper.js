@@ -70,10 +70,12 @@ const KeyboardWrapper = () => {
     let key = args.key;
     let prev = keyboard.current.getInput();
 
-    setInput(prev + key);
-    keyboard.current.setInput(prev + key);
+    if (args.hasFocus) {
+      setInput(prev + key);
+      keyboard.current.setInput(prev + key);
+    }
 
-    // keyboard.current.getButtonElement('a').focus(); 
+
   }
 
   /**

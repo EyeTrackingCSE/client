@@ -25,3 +25,9 @@ process.on('message', (arg) => {
     });
 });
 
+/**
+ * When the process exits, destroy the current tobii instance.
+ */
+process.on('close', (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+});
