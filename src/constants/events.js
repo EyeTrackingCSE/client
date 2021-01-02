@@ -1,5 +1,5 @@
 /**
- * Define names of ipc events. Makes things nice and consistent
+ * Define names of ipc events.
  */
 module.exports = {
     ASYNC_GAZE_FOCUS_EVENT: 'ASYNC_GAZE_FOCUS_EVENT',
