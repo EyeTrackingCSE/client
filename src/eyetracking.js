@@ -8,6 +8,7 @@
  */
 const eyetracking = require('eyetracking');
 
+let screen;
 process.on('message', (arg) => {
     if (!arg) {
         throw new Error("can't instance tobii. invalid params")
@@ -20,14 +21,8 @@ process.on('message', (arg) => {
     }
     screen = new eyetracking(arg.width, arg.height);
     screen.AddRectangles(arg.rectangles);
+    
     screen.Listen((id, hasFocus, timestamp) => {
-        process.send({ id, hasFocus, timestamp });
+        process.send({ id, hasFocus, timestamp, pid: process.pid });
     });
-});
-
-/**
- * When the process exits, destroy the current tobii instance.
- */
-process.on('close', (code) => {
-    console.log(`child process close all stdio with code ${code}`);
 });

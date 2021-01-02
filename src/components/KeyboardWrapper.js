@@ -57,25 +57,20 @@ const KeyboardWrapper = () => {
     console.log(dims);
 
     // Start Tobii listen loop
-    ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
     ipcRenderer.send(ASYNC_LISTEN, dims);
   }
 
   /**
-   * TODO
+   * When the user focuses on a key, 
+   * update the input variabe.
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
-  const onGazeFocusEvent = (event, args) => {
-    let key = args.key;
-    let prev = keyboard.current.getInput();
+  const onGazeFocusEvent = (event, args) => {    
+    let newInput = keyboard.current.getInput() + args.key;
 
-    if (args.hasFocus) {
-      setInput(prev + key);
-      keyboard.current.setInput(prev + key);
-    }
-
-
+    setInput(newInput);
+    keyboard.current.setInput(newInput);
   }
 
   /**
@@ -124,6 +119,7 @@ const KeyboardWrapper = () => {
    */
   useEffect(() => {
     window.addEventListener('resize', setKeyDimensions);
+    ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
     setKeyDimensions();
   }, []);
 
