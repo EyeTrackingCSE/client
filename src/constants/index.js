@@ -5,5 +5,5 @@ module.exports = {
     ...require('./events'),
     ...require('./status'),
     ...require('./lettering'),
-    ...require('./default-settings')
+    ...require('./default-eye-settings')
 }
