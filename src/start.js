@@ -118,6 +118,7 @@ ipcMain.on(ASYNC_LISTEN, (event, arg) => {
 
   console.log(`Forking eyetracking process (${eyetrackingProcess.pid || 'no pid found'})`);
   console.log(`(${eyetrackingProcess.pid}): w${arg.width} h${arg.height} r${arg.rectangles.length}`);
+ 
   // Send the screen metadata
   eyetrackingProcess.send(arg);
 
@@ -128,7 +129,9 @@ ipcMain.on(ASYNC_LISTEN, (event, arg) => {
     if (!evt.hasFocus)
       return;
 
-    // something cursed
+    // the id of the event corresponds to an index in
+    // arg.rectangles. combine the rectangle focused and the evt
+    // into a single object to send back to the render process
     let payload = {
       ...evt,
       ...arg.rectangles[evt.id]

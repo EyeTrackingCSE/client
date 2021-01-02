@@ -61,19 +61,16 @@ const KeyboardWrapper = () => {
   }
 
   /**
-   * TODO
+   * When the user focuses on a key, 
+   * update the input variabe.
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
-  const onGazeFocusEvent = (event, args) => {
-    let key = args.key;
-    let prev = keyboard.current.getInput();
-    
-    let newInput = prev + key;
+  const onGazeFocusEvent = (event, args) => {    
+    let newInput = keyboard.current.getInput() + args.key;
+
     setInput(newInput);
     keyboard.current.setInput(newInput);
-    console.log(key);
-
   }
 
   /**
