@@ -4,6 +4,7 @@ import Keyboard from 'react-simple-keyboard';
 import Toggle from 'react-toggle'
 
 import 'react-simple-keyboard/build/css/index.css';
+import 'react-toggle/style.css';
 
 import "../styles/KeyboardWrapper.css";
 
@@ -80,10 +81,14 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
+    console.log(eyetrackingIsOn);
+    
+    if (!eyetrackingIsOn)
+      return;
+
     let currentInput = keyboard.current.getInput();
     let newInput = currentInput + args.key;
 
-    console.log(args.key);
     setInput(newInput);
     keyboard.current.setInput(newInput);
   }
@@ -129,7 +134,8 @@ const KeyboardWrapper = () => {
   }
 
   const onEyeTrackingIsOnChange = event => {
-    console.log("on eyetracking");
+    setEyetrackingIsOn(event.target.checked);
+    console.log(eyetrackingIsOn);
   }
 
   /**
@@ -149,7 +155,7 @@ const KeyboardWrapper = () => {
           id='eyetracking-toggle'
           defaultChecked={eyetrackingIsOn}
           onChange={onEyeTrackingIsOnChange} />
-        <label htmlFor='eyetracking-toggle'>Adjacent label tag</label>
+        <label htmlFor='eyetracking-toggle'>Use Eyetracking</label>
       </div>
       <textarea
         value={input}
