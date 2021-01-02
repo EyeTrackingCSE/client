@@ -26,10 +26,3 @@ process.on('message', (arg) => {
         process.send({ id, hasFocus, timestamp, pid: process.pid });
     });
 });
-
-/**
- * When the process exits, destroy the current tobii instance.
- */
-process.on('close', (code) => {
-    delete screen;
-});
