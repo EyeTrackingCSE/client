@@ -128,6 +128,10 @@ const KeyboardWrapper = () => {
     keyboard.current.setInput(input);
   }
 
+  const onEyeTrackingIsOnChange = event => {
+    console.log("on eyetracking");
+  }
+
   /**
    * Gets called when component mounts
    * Just binds the 'resize' event to setKeyDimensions to update eyetracker
@@ -141,7 +145,11 @@ const KeyboardWrapper = () => {
   return (
     <div>
       <div id="settings-bar">
-        Settings bar
+          <Toggle
+          id='eyetracking-toggle'
+          defaultChecked={eyetrackingIsOn}
+          onChange={onEyeTrackingIsOnChange} />
+        <label htmlFor='eyetracking-toggle'>Adjacent label tag</label>
       </div>
       <textarea
         value={input}
