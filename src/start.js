@@ -15,7 +15,6 @@ const {
 
 let mainWindow
 
-let screen = null;
 // Electron window params, we can config this to better fit the use of our app.
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -63,6 +62,7 @@ app.on('activate', () => {
  * Actually creates a new eyetracking instance, so old data is disregarded.
  * Pushes keys to node-gyp module.
  */
+let screen;
 ipcMain.on(SYNC_SET_NEW_SCREEN, (event, arg) => {
   if (!arg.rectangles.length) {
     event.returnValue = ERROR;
@@ -117,12 +117,17 @@ ipcMain.on(ASYNC_LISTEN, (event, arg) => {
   });
 
   console.log(`Forking eyetracking process (${eyetrackingProcess.pid || 'no pid found'})`);
-
+  console.log(`(${eyetrackingProcess.pid}): w${arg.width} h${arg.height} r${arg.rectangles.length}`);
   // Send the screen metadata
   eyetrackingProcess.send(arg);
 
   // When the forked process emits a message, push to the render process
   eyetrackingProcess.on('message', (evt) => {
+    
+    // Skip any event that indicates a region does NOT have focus.
+    if (!evt.hasFocus)
+      return;
+
     // something cursed
     let payload = {
       ...evt,
@@ -130,6 +135,5 @@ ipcMain.on(ASYNC_LISTEN, (event, arg) => {
     }
     event.reply(ASYNC_GAZE_FOCUS_EVENT, payload);
   });
-
 });
 
