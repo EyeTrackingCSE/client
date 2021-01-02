@@ -13,8 +13,22 @@ import {
 const { ipcRenderer } = window.require("electron");
 
 const KeyboardWrapper = () => {
+  /* Text input string var */
   const [input, setInput] = useState("");
+  
+  /* Layout of the keyboard, used for pivoting between shift and unshift */
   const [layout, setLayout] = useState("default");
+
+  /* How long the user should "dwell" their focus on a key
+    before accepting the key as input. Default 1000ms (1 second) */
+  const [dwellTimeMS, setDwellTimeMS] = useState(1000);  
+
+  /* Boolean denoting whether the component should consider
+     gaze events where (hasFocus == false) as valid input. 
+     Default 'true', the user must be focused in order for it
+     to be considered valid input */ 
+  const [focusRequired, setFocusRequired] = useState(true);
+  
   const keyboard = useRef();
 
 
