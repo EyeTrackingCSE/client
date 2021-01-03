@@ -33,9 +33,9 @@ textarea:focus {
 }
 
 #settings-bar {
-    font-size: 20px;
-    background-color: #eeeeee;
-    color: #000000;
+    /* font-size: 20px; */
+    background-color: transparent;
+    color: #ffffff;
 }
   
 /*Hack the keyboard lib because I need these to be bigger */

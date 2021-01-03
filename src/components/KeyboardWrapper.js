@@ -31,33 +31,6 @@ const KeyboardWrapper = () => {
 
   const keyboard = useRef();
 
-
-  /**
-   * Extracts width of screen, height of screen,
-   * and coordinates of key on virutal keyboard.
-   */
-  const getKeyDimensions = () => {
-    let w = window.outerWidth;
-    let h = window.outerHeight;
-    let keyDimensions = [];
-    keyboard.current.recurseButtons(buttonElement => {
-      keyDimensions.push({
-        id: keyDimensions.length,
-        key: buttonElement.innerText,
-        x: buttonElement.offsetLeft,
-        y: buttonElement.offsetTop,
-        width: buttonElement.offsetWidth,
-        height: buttonElement.offsetHeight,
-      });
-    });
-
-    return {
-      width: w,
-      height: h,
-      rectangles: keyDimensions
-    };
-  }
-
   /**
    * Gets screen and keyboard metadata, and pushes said info to
    * the eyetracking module via ipc.
@@ -67,11 +40,29 @@ const KeyboardWrapper = () => {
    * On each gaze focus event, calls onGazeFocusEvent()
    */
   const setKeyDimensions = () => {
-    let dims = getKeyDimensions();
-    console.log(dims);
+    let rectangles = [];
+
+    keyboard.current.recurseButtons(buttonElement => {
+      rectangles.push({
+        id: rectangles.length,
+        key: buttonElement.innerText,
+        x: buttonElement.offsetLeft,
+        y: buttonElement.offsetTop,
+        width: buttonElement.offsetWidth,
+        height: buttonElement.offsetHeight,
+      });
+    });
+
+    let dimensions = {
+      width: window.outerWidth,
+      height: window.outerHeight,
+      rectangles: rectangles
+    };
+
+    console.log(dimensions);
 
     // Start Tobii listen loop
-    ipcRenderer.send(ASYNC_LISTEN, dims);
+    ipcRenderer.send(ASYNC_LISTEN, dimensions);
   }
 
   /**
@@ -82,7 +73,7 @@ const KeyboardWrapper = () => {
    */
   const onGazeFocusEvent = (event, args) => {
     console.log(eyetrackingIsOn);
-    
+
     if (!eyetrackingIsOn)
       return;
 
@@ -134,8 +125,10 @@ const KeyboardWrapper = () => {
   }
 
   const onEyeTrackingIsOnChange = event => {
-    setEyetrackingIsOn(event.target.checked);
-    console.log(eyetrackingIsOn);
+    setEyetrackingIsOn(state => {
+      console.log(state);
+      return !state;
+    });
   }
 
   /**
@@ -151,7 +144,7 @@ const KeyboardWrapper = () => {
   return (
     <div>
       <div id="settings-bar">
-          <Toggle
+        <Toggle
           id='eyetracking-toggle'
           defaultChecked={eyetrackingIsOn}
           onChange={onEyeTrackingIsOnChange} />
