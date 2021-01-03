@@ -27,7 +27,7 @@ const KeyboardWrapper = () => {
   const [dwellTimeMS, setDwellTimeMS] = useState(1000);
 
   /* By default enable eyetracking keyboard */
-  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(true);
+  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(false);
 
   const keyboard = useRef();
 
@@ -93,7 +93,7 @@ const KeyboardWrapper = () => {
   };
 
   /**
-   * Swaps keyboard to shift mode.
+   * Swaps keyboard to shift mode or vice-versa.
    */
   const handleShift = () => {
     const newLayout = layout === "default" ? "shift" : "default";
@@ -105,8 +105,6 @@ const KeyboardWrapper = () => {
    * @param {string} button button pressed
    */
   const onKeyPress = button => {
-    // console.log("Button pressed", button);
-
     if (button === "{shift}" || button === "{lock}") {
       handleShift();
     }
@@ -125,15 +123,11 @@ const KeyboardWrapper = () => {
   }
 
   const onEyeTrackingIsOnChange = event => {
-    setEyetrackingIsOn(state => {
-      console.log(state);
-      return !state;
-    });
+    setEyetrackingIsOn(event.target.checked);
   }
 
   /**
    * Gets called when component mounts
-   * Just binds the 'resize' event to setKeyDimensions to update eyetracker
    */
   useEffect(() => {
     window.addEventListener('resize', setKeyDimensions);
@@ -142,13 +136,12 @@ const KeyboardWrapper = () => {
   }, []);
 
   return (
-    <div>
+    <div id="component-wrapper">
       <div id="settings-bar">
         <Toggle
-          id='eyetracking-toggle'
+          id="eyetracking-toggle"
           defaultChecked={eyetrackingIsOn}
           onChange={onEyeTrackingIsOnChange} />
-        <label htmlFor='eyetracking-toggle'>Use Eyetracking</label>
       </div>
       <textarea
         value={input}
@@ -156,6 +149,7 @@ const KeyboardWrapper = () => {
         onChange={onChangeInput}
       />
       <Keyboard
+        id="simple-keyboard"
         keyboardRef={r => (keyboard.current = r)}
         layoutName={layout}
         onChange={onChange}
