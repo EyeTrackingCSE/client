@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 import Keyboard from 'react-simple-keyboard';
+import Toggle from 'react-toggle'
+
 import 'react-simple-keyboard/build/css/index.css';
+import 'react-toggle/style.css';
 
 import "../styles/KeyboardWrapper.css";
 
@@ -13,8 +16,19 @@ import {
 const { ipcRenderer } = window.require("electron");
 
 const KeyboardWrapper = () => {
+  /* Text input string var */
   const [input, setInput] = useState("");
+
+  /* Layout of the keyboard, used for pivoting between shift and unshift */
   const [layout, setLayout] = useState("default");
+
+  /* How long the user should "dwell" their focus on a key
+    before accepting the key as input. Default 1000ms (1 second) */
+  const [dwellTimeMS, setDwellTimeMS] = useState(1000);
+
+  /* By default enable eyetracking keyboard */
+  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(true);
+
   const keyboard = useRef();
 
 
@@ -66,8 +80,14 @@ const KeyboardWrapper = () => {
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
-  const onGazeFocusEvent = (event, args) => {    
-    let newInput = keyboard.current.getInput() + args.key;
+  const onGazeFocusEvent = (event, args) => {
+    console.log(eyetrackingIsOn);
+    
+    if (!eyetrackingIsOn)
+      return;
+
+    let currentInput = keyboard.current.getInput();
+    let newInput = currentInput + args.key;
 
     setInput(newInput);
     keyboard.current.setInput(newInput);
@@ -113,6 +133,11 @@ const KeyboardWrapper = () => {
     keyboard.current.setInput(input);
   }
 
+  const onEyeTrackingIsOnChange = event => {
+    setEyetrackingIsOn(event.target.checked);
+    console.log(eyetrackingIsOn);
+  }
+
   /**
    * Gets called when component mounts
    * Just binds the 'resize' event to setKeyDimensions to update eyetracker
@@ -125,6 +150,13 @@ const KeyboardWrapper = () => {
 
   return (
     <div>
+      <div id="settings-bar">
+          <Toggle
+          id='eyetracking-toggle'
+          defaultChecked={eyetrackingIsOn}
+          onChange={onEyeTrackingIsOnChange} />
+        <label htmlFor='eyetracking-toggle'>Use Eyetracking</label>
+      </div>
       <textarea
         value={input}
         placeholder={"Tap on the virtual keyboard to start"}

@@ -4,5 +4,5 @@
 module.exports = {
     ...require('./events'),
     ...require('./status'),
-    ...require('./lettering')
+    ...require('./lettering'),
 }
