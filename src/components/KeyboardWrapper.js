@@ -138,22 +138,23 @@ const KeyboardWrapper = () => {
   }, []);
 
   return (
-    <div id="component-wrapper">
-      <div id="settings-bar">
+    <div className={"component-wrapper"}>
+      <div className={"settings-bar"}>
         <Toggle
           id="eyetracking-toggle"
           defaultChecked={eyetrackingIsOn}
           onChange={onEyeTrackingIsOnChange} />
       </div>
-      <textarea
-        className={"canvas"}
-        // style={{height: window.outerHeight - 485}}
-        value={input}
-        placeholder={"Tap on the virtual keyboard to start"}
-        onChange={onChangeInput}
-      />
+      <div className={"textarea-wrapper"}>
+        <textarea
+          className={"canvas"}
+          value={input}
+          placeholder={"Tap on the virtual keyboard to start"}
+          onChange={onChangeInput}
+        />
+      </div>
       <Keyboard
-        id="simple-keyboard"
+        className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}
         layoutName={layout}
         onChange={onChange}
