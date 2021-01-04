@@ -43,13 +43,15 @@ const KeyboardWrapper = () => {
     let rectangles = [];
 
     keyboard.current.recurseButtons(buttonElement => {
+      let block = buttonElement.getBoundingClientRect();
+
       rectangles.push({
         id: rectangles.length,
         key: buttonElement.innerText,
-        x: buttonElement.offsetLeft,
-        y: buttonElement.offsetTop,
-        width: buttonElement.offsetWidth,
-        height: buttonElement.offsetHeight,
+        x: block.x,
+        y: block.y,
+        width: block.width,
+        height: block.height
       });
     });
 
