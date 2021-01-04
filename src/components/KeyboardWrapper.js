@@ -26,7 +26,7 @@ const KeyboardWrapper = () => {
   const [dwellTimeMS, setDwellTimeMS] = useState(1000);
 
   /* By default enable eyetracking keyboard */
-  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(true);
+  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(false);
 
   const keyboard = useRef();
 
@@ -39,6 +39,9 @@ const KeyboardWrapper = () => {
    * On each gaze focus event, calls onGazeFocusEvent()
    */
   const startGazeFocusEventListener = () => {
+    if (!eyetrackingIsOn)
+      return;
+
     let rectangles = [];
 
     keyboard.current.recurseButtons(buttonElement => {
@@ -148,7 +151,7 @@ const KeyboardWrapper = () => {
    */
   useEffect(() => {
     if (eyetrackingIsOn) {
-      ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent); 
+      ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
       startGazeFocusEventListener();
     } else {
       ipcRenderer.removeAllListeners(ASYNC_GAZE_FOCUS_EVENT);
@@ -158,10 +161,15 @@ const KeyboardWrapper = () => {
   return (
     <div className={"component-wrapper"}>
       <div className={"settings-bar"}>
-        <Toggle
-          id="eyetracking-toggle"
-          defaultChecked={eyetrackingIsOn}
-          onChange={onEyeTrackingIsOnChange} />
+        <div>
+          <Toggle
+            id='eyetracking-toggle'
+            defaultChecked={eyetrackingIsOn}
+            onChange={onEyeTrackingIsOnChange} />
+          <label htmlFor='eyetracking-toggle'>Adjacent label tag</label>
+        </div>
+
+
       </div>
       <div className={"textarea-wrapper"}>
         <textarea
