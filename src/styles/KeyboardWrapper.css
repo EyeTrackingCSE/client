@@ -1,17 +1,4 @@
-
-
-
-textarea {
-    /* min-height: 45vh; */
-    /* flex: 1;
-    display: flex;
-    justify-content: center;
-    flex-direction: column; */
-
-    align-items: stretch;
-    height: 100%;
-    position: fixed;
-
+.canvas {
     width: 100%;
     padding: 20px;
     font-size: 25px;
@@ -23,21 +10,16 @@ textarea {
     resize: none;
 }
 
-textarea:focus {
+.canvas:focus {
     outline: none !important;
     border:1px solid transparent;
 }
 
-.component-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
+.component-wrapper {}
 
 .simple-keyboard {
-    bottom: 0;
-    position: fixed;
-    height: auto%;
+    /* bottom: 0;
+    position: fixed; */
 }
 
 #settings-bar {
@@ -46,11 +28,6 @@ textarea:focus {
     padding: 15px 17.5px;
     color: #ffffff;
 
-
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
 }
   
 /*Hack the keyboard lib because I need these to be bigger */

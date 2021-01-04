@@ -54,8 +54,8 @@ const KeyboardWrapper = () => {
     });
 
     let dimensions = {
-      width: window.outerWidth,
-      height: window.outerHeight,
+      width: window.innerWidth,
+      height: window.innerHeight,
       rectangles: rectangles
     };
 
@@ -133,6 +133,8 @@ const KeyboardWrapper = () => {
     window.addEventListener('resize', setKeyDimensions);
     ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
     setKeyDimensions();
+    console.log(window.outerHeight);
+    console.log(window.innerHeight);
   }, []);
 
   return (
@@ -144,6 +146,8 @@ const KeyboardWrapper = () => {
           onChange={onEyeTrackingIsOnChange} />
       </div>
       <textarea
+        className={"canvas"}
+        // style={{height: window.outerHeight - 485}}
         value={input}
         placeholder={"Tap on the virtual keyboard to start"}
         onChange={onChangeInput}
