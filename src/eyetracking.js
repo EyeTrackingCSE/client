@@ -1,4 +1,3 @@
-
 /**
  * This file is intended to be run unilaterally
  * from the main and renderer processes of the electron app.
@@ -20,8 +19,11 @@ process.on('message', (arg) => {
     }
     let screen = new eyetracking(arg.width, arg.height);
     screen.AddRectangles(arg.rectangles);
-    
+
     screen.Listen((id, hasFocus, timestamp) => {
+        // Skip any event that indicates a region does NOT have focus.
+        if (!hasFocus)
+            return;
         process.send({ id, hasFocus, timestamp, pid: process.pid });
     });
 });

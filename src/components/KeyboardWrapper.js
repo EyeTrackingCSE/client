@@ -27,7 +27,7 @@ const KeyboardWrapper = () => {
   const [dwellTimeMS, setDwellTimeMS] = useState(1000);
 
   /* By default enable eyetracking keyboard */
-  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(false);
+  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(true);
 
   const keyboard = useRef();
 
@@ -54,8 +54,8 @@ const KeyboardWrapper = () => {
     });
 
     let dimensions = {
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: window.outerWidth,
+      height: window.outerHeight,
       rectangles: rectangles
     };
 
