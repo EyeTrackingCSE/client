@@ -27,7 +27,7 @@ const KeyboardWrapper = () => {
   const [dwellTimeMS, setDwellTimeMS] = useState(1000);
 
   /* By default enable eyetracking keyboard */
-  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(false);
+  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(true);
 
   const keyboard = useRef();
 
@@ -43,19 +43,21 @@ const KeyboardWrapper = () => {
     let rectangles = [];
 
     keyboard.current.recurseButtons(buttonElement => {
+      let block = buttonElement.getBoundingClientRect();
+
       rectangles.push({
         id: rectangles.length,
         key: buttonElement.innerText,
-        x: buttonElement.offsetLeft,
-        y: buttonElement.offsetTop,
-        width: buttonElement.offsetWidth,
-        height: buttonElement.offsetHeight,
+        x: block.x,
+        y: block.y,
+        width: block.width,
+        height: block.height
       });
     });
 
     let dimensions = {
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: window.outerWidth,
+      height: window.outerHeight,
       rectangles: rectangles
     };
 
