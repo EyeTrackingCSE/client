@@ -21,9 +21,6 @@ process.on('message', (arg) => {
     screen.AddRectangles(arg.rectangles);
 
     screen.Listen((id, hasFocus, timestamp) => {
-        // Skip any event that indicates a region does NOT have focus.
-        if (!hasFocus)
-            return;
         process.send({ id, hasFocus, timestamp, pid: process.pid });
     });
 });

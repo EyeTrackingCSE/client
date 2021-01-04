@@ -16,7 +16,6 @@ import {
 const { ipcRenderer } = window.require("electron");
 
 const KeyboardWrapper = () => {
-  /* Text input string var */
   const [input, setInput] = useState("");
 
   /* Layout of the keyboard, used for pivoting between shift and unshift */
@@ -39,7 +38,7 @@ const KeyboardWrapper = () => {
    * 
    * On each gaze focus event, calls onGazeFocusEvent()
    */
-  const setKeyDimensions = () => {
+  const startGazeFocusEventListener = () => {
     let rectangles = [];
 
     keyboard.current.recurseButtons(buttonElement => {
@@ -74,11 +73,8 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
-    console.log(eyetrackingIsOn);
-
-    if (!eyetrackingIsOn)
+    if (!args.hasFocus)
       return;
-
     let currentInput = keyboard.current.getInput();
     let newInput = currentInput + args.key;
 
@@ -130,14 +126,34 @@ const KeyboardWrapper = () => {
 
   /**
    * Gets called when component mounts
+   * 
+   * When the use changes the window size,
+   * this affects the screen dimensions and keyboard key offets
+   * meaning these values must be updated to the eytracking
+   * device. The new Gaze Focus Event Listener needs to be started
+   * to accomomdate new screen dimensions
    */
   useEffect(() => {
-    window.addEventListener('resize', setKeyDimensions);
-    ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
-    setKeyDimensions();
-    console.log(window.outerHeight);
-    console.log(window.innerHeight);
+    window.addEventListener('resize', startGazeFocusEventListener);
   }, []);
+
+  /**
+   * Gets called when the user turns on/off eyetracking.
+   * 
+   * If they turn eyetracking on, it runs startGazeEventListener()
+   * to kickstart a new tobii eyetracking session
+   * 
+   * If they turn eyetracking off, it unhooks the ASYNC_GAZE_FOCUS_EVENT
+   * listener from IPC.
+   */
+  useEffect(() => {
+    if (eyetrackingIsOn) {
+      ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent); 
+      startGazeFocusEventListener();
+    } else {
+      ipcRenderer.removeAllListeners(ASYNC_GAZE_FOCUS_EVENT);
+    }
+  }, [eyetrackingIsOn])
 
   return (
     <div className={"component-wrapper"}>
@@ -163,7 +179,6 @@ const KeyboardWrapper = () => {
         onKeyPress={onKeyPress}
         physicalKeyboardHighlight={true}
       />
-
     </div>
   );
 }
