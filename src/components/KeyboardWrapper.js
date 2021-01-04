@@ -73,6 +73,8 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
+    if (!args.hasFocus)
+      return;
     let currentInput = keyboard.current.getInput();
     let newInput = currentInput + args.key;
 
