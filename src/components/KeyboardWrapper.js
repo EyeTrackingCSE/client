@@ -27,36 +27,9 @@ const KeyboardWrapper = () => {
   const [dwellTimeMS, setDwellTimeMS] = useState(1000);
 
   /* By default enable eyetracking keyboard */
-  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(true);
+  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(false);
 
   const keyboard = useRef();
-
-
-  /**
-   * Extracts width of screen, height of screen,
-   * and coordinates of key on virutal keyboard.
-   */
-  const getKeyDimensions = () => {
-    let w = window.outerWidth;
-    let h = window.outerHeight;
-    let keyDimensions = [];
-    keyboard.current.recurseButtons(buttonElement => {
-      keyDimensions.push({
-        id: keyDimensions.length,
-        key: buttonElement.innerText,
-        x: buttonElement.offsetLeft,
-        y: buttonElement.offsetTop,
-        width: buttonElement.offsetWidth,
-        height: buttonElement.offsetHeight,
-      });
-    });
-
-    return {
-      width: w,
-      height: h,
-      rectangles: keyDimensions
-    };
-  }
 
   /**
    * Gets screen and keyboard metadata, and pushes said info to
@@ -67,11 +40,29 @@ const KeyboardWrapper = () => {
    * On each gaze focus event, calls onGazeFocusEvent()
    */
   const setKeyDimensions = () => {
-    let dims = getKeyDimensions();
-    console.log(dims);
+    let rectangles = [];
+
+    keyboard.current.recurseButtons(buttonElement => {
+      rectangles.push({
+        id: rectangles.length,
+        key: buttonElement.innerText,
+        x: buttonElement.offsetLeft,
+        y: buttonElement.offsetTop,
+        width: buttonElement.offsetWidth,
+        height: buttonElement.offsetHeight,
+      });
+    });
+
+    let dimensions = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      rectangles: rectangles
+    };
+
+    console.log(dimensions);
 
     // Start Tobii listen loop
-    ipcRenderer.send(ASYNC_LISTEN, dims);
+    ipcRenderer.send(ASYNC_LISTEN, dimensions);
   }
 
   /**
@@ -82,7 +73,7 @@ const KeyboardWrapper = () => {
    */
   const onGazeFocusEvent = (event, args) => {
     console.log(eyetrackingIsOn);
-    
+
     if (!eyetrackingIsOn)
       return;
 
@@ -102,7 +93,7 @@ const KeyboardWrapper = () => {
   };
 
   /**
-   * Swaps keyboard to shift mode.
+   * Swaps keyboard to shift mode or vice-versa.
    */
   const handleShift = () => {
     const newLayout = layout === "default" ? "shift" : "default";
@@ -114,8 +105,6 @@ const KeyboardWrapper = () => {
    * @param {string} button button pressed
    */
   const onKeyPress = button => {
-    // console.log("Button pressed", button);
-
     if (button === "{shift}" || button === "{lock}") {
       handleShift();
     }
@@ -135,34 +124,37 @@ const KeyboardWrapper = () => {
 
   const onEyeTrackingIsOnChange = event => {
     setEyetrackingIsOn(event.target.checked);
-    console.log(eyetrackingIsOn);
   }
 
   /**
    * Gets called when component mounts
-   * Just binds the 'resize' event to setKeyDimensions to update eyetracker
    */
   useEffect(() => {
     window.addEventListener('resize', setKeyDimensions);
     ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
     setKeyDimensions();
+    console.log(window.outerHeight);
+    console.log(window.innerHeight);
   }, []);
 
   return (
-    <div>
-      <div id="settings-bar">
-          <Toggle
-          id='eyetracking-toggle'
+    <div className={"component-wrapper"}>
+      <div className={"settings-bar"}>
+        <Toggle
+          id="eyetracking-toggle"
           defaultChecked={eyetrackingIsOn}
           onChange={onEyeTrackingIsOnChange} />
-        <label htmlFor='eyetracking-toggle'>Use Eyetracking</label>
       </div>
-      <textarea
-        value={input}
-        placeholder={"Tap on the virtual keyboard to start"}
-        onChange={onChangeInput}
-      />
+      <div className={"textarea-wrapper"}>
+        <textarea
+          className={"canvas"}
+          value={input}
+          placeholder={"Tap on the virtual keyboard to start"}
+          onChange={onChangeInput}
+        />
+      </div>
       <Keyboard
+        className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}
         layoutName={layout}
         onChange={onChange}

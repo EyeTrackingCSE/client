@@ -8,7 +8,6 @@
  */
 const eyetracking = require('eyetracking');
 
-let screen;
 process.on('message', (arg) => {
     if (!arg) {
         throw new Error("can't instance tobii. invalid params")
@@ -19,7 +18,7 @@ process.on('message', (arg) => {
     if (!arg.rectangles.length) {
         throw new Error(`no interactive regions passed in ['rectangles'] property`)
     }
-    screen = new eyetracking(arg.width, arg.height);
+    let screen = new eyetracking(arg.width, arg.height);
     screen.AddRectangles(arg.rectangles);
     
     screen.Listen((id, hasFocus, timestamp) => {
