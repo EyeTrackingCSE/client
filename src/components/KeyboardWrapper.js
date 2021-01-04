@@ -12,6 +12,7 @@ import {
   ASYNC_GAZE_FOCUS_EVENT,
   ASYNC_LISTEN,
 } from "../constants/index";
+import KeyboardReact from 'react-simple-keyboard';
 
 const { ipcRenderer } = window.require("electron");
 
@@ -58,8 +59,8 @@ const KeyboardWrapper = () => {
     });
 
     let dimensions = {
-      width: window.outerWidth,
-      height: window.outerHeight,
+      width: window.innerWidth,
+      height: window.innerHeight,
       rectangles: rectangles
     };
 
@@ -95,6 +96,8 @@ const KeyboardWrapper = () => {
 
   /**
    * Swaps keyboard to shift mode or vice-versa.
+   * 
+   * Doesn't actually work at the moment, hitting shift does nothing
    */
   const handleShift = () => {
     const newLayout = layout === "default" ? "shift" : "default";
@@ -123,6 +126,11 @@ const KeyboardWrapper = () => {
     keyboard.current.setInput(input);
   }
 
+  /**
+   * Called when the user toggles the checkbox to 
+   * turn on/off eyetracking.
+   * @param {object} event 
+   */
   const onEyeTrackingIsOnChange = event => {
     setEyetrackingIsOn(event.target.checked);
   }
@@ -141,7 +149,8 @@ const KeyboardWrapper = () => {
   }, []);
 
   /**
-   * Gets called when the user turns on/off eyetracking.
+   * Gets called when the user turns on/off eyetracking. Also happens to 
+   * run on startup (because eyetrackingIsOn setting its default value triggers this hook)
    * 
    * If they turn eyetracking on, it runs startGazeEventListener()
    * to kickstart a new tobii eyetracking session
@@ -161,13 +170,13 @@ const KeyboardWrapper = () => {
   return (
     <div className={"component-wrapper"}>
       <div className={"settings-bar"}>
-        <div>
-          <Toggle
-            id='eyetracking-toggle'
-            defaultChecked={eyetrackingIsOn}
-            onChange={onEyeTrackingIsOnChange} />
-          <label htmlFor='eyetracking-toggle'>Adjacent label tag</label>
-        </div>
+        <label htmlFor='eid' className={"eyetracking-toggle-label"}>Eyetracking</label>
+
+        <Toggle
+          className={"eyetracking-toggle"}
+          id='eid'
+          defaultChecked={eyetrackingIsOn}
+          onChange={onEyeTrackingIsOnChange} />
 
 
       </div>
