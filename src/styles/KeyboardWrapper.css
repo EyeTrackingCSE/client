@@ -18,6 +18,17 @@
     /* background-color: transparent; */
 }
 
+.eyetracking-toggle {
+    float: right;
+}
+
+.eyetracking-toggle-label {
+    float: right;
+    padding-left: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
 .canvas {
     height: 100%;
     width: 100%;
