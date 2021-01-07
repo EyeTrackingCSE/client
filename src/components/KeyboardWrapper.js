@@ -12,7 +12,6 @@ import {
   ASYNC_GAZE_FOCUS_EVENT,
   ASYNC_LISTEN,
 } from "../constants/index";
-import KeyboardReact from 'react-simple-keyboard';
 
 const { ipcRenderer } = window.require("electron");
 
@@ -88,11 +87,11 @@ const KeyboardWrapper = () => {
     // key = "" when the key is the spacebar 
     if (key == "")
       key = " ";
+    
     let newInput = keyboard.current.getInput() + key;
 
     setInput(newInput);
     keyboard.current.setInput(newInput);
-
   }
 
   /**
