@@ -29,7 +29,7 @@ const KeyboardWrapper = () => {
   const [eyetrackingIsOn, setEyetrackingIsOn] = useState(false);
 
   /* object that logs timestamp of letters focused on */
-  const [gazeLog, setGazeLog] = useState({});
+  const [gazeLog, setGazeLog] = useState([]);
 
   const keyboard = useRef();
 
@@ -78,23 +78,34 @@ const KeyboardWrapper = () => {
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
-  const onGazeFocusEvent = (event, args) => {
+  const onGazeFocusEvent = async (event, args) => {
     if (!args.hasFocus)
       return;
 
-    let key = args.key;
+    let { key, timestamp } = args
 
     // key = "" when the key is the spacebar 
     if (key == "")
       key = " ";
-    
-    // log the timestamp
-    setGazeLog(logs => ({
-      ...logs,
-      key: args.timestamp
-    }));
 
-    console.log(gazeLog);
+    let update = [];
+
+    // log the timestamp
+    setGazeLog(logs => {
+      // update = {
+      //   ...logs,
+      //   [key]: timestamp
+      // }
+      update = [
+        ...logs,
+        timestamp
+      ];
+      return update;
+    });
+
+    let diff = timestamp - update[update.length - 2];
+
+    console.log(diff);
 
     let newInput = keyboard.current.getInput() + key;
 
@@ -181,9 +192,9 @@ const KeyboardWrapper = () => {
     } else {
       ipcRenderer.removeAllListeners(ASYNC_GAZE_FOCUS_EVENT);
     }
-
-    keyboard.current.addButtonTheme()
   }, [eyetrackingIsOn])
+
+
 
   return (
     <div className={"component-wrapper"}>
