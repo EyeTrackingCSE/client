@@ -88,6 +88,14 @@ const KeyboardWrapper = () => {
     if (key == "")
       key = " ";
     
+    // log the timestamp
+    setGazeLog(logs => ({
+      ...logs,
+      key: args.timestamp
+    }));
+
+    console.log(gazeLog);
+
     let newInput = keyboard.current.getInput() + key;
 
     setInput(newInput);
