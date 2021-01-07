@@ -63,3 +63,7 @@
 div:focus {
     background-color: rgb(218, 220, 228)
 }
+
+.myCustomClass {
+    background-color: red;
+}
