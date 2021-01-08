@@ -12,7 +12,6 @@ import {
   ASYNC_GAZE_FOCUS_EVENT,
   ASYNC_LISTEN,
 } from "../constants/index";
-import KeyboardReact from 'react-simple-keyboard';
 
 const { ipcRenderer } = window.require("electron");
 
@@ -28,6 +27,9 @@ const KeyboardWrapper = () => {
 
   /* By default enable eyetracking keyboard */
   const [eyetrackingIsOn, setEyetrackingIsOn] = useState(false);
+
+  /* object that logs timestamp of letters focused on */
+  const [gazeLog, setGazeLog] = useState([]);
 
   const keyboard = useRef();
 
@@ -76,11 +78,36 @@ const KeyboardWrapper = () => {
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
-  const onGazeFocusEvent = (event, args) => {
+  const onGazeFocusEvent = async (event, args) => {
     if (!args.hasFocus)
       return;
-    let currentInput = keyboard.current.getInput();
-    let newInput = currentInput + args.key;
+
+    let { key, timestamp } = args
+
+    // key = "" when the key is the spacebar 
+    if (key == "")
+      key = " ";
+
+    let update = [];
+
+    // log the timestamp
+    setGazeLog(logs => {
+      // update = {
+      //   ...logs,
+      //   [key]: timestamp
+      // }
+      update = [
+        ...logs,
+        timestamp
+      ];
+      return update;
+    });
+
+    let diff = timestamp - update[update.length - 2];
+
+    console.log(diff);
+
+    let newInput = keyboard.current.getInput() + key;
 
     setInput(newInput);
     keyboard.current.setInput(newInput);
@@ -167,18 +194,17 @@ const KeyboardWrapper = () => {
     }
   }, [eyetrackingIsOn])
 
+
+
   return (
     <div className={"component-wrapper"}>
       <div className={"settings-bar"}>
         <label htmlFor='eid' className={"eyetracking-toggle-label"}>Eyetracking</label>
-
         <Toggle
           className={"eyetracking-toggle"}
           id='eid'
           defaultChecked={eyetrackingIsOn}
           onChange={onEyeTrackingIsOnChange} />
-
-
       </div>
       <div className={"textarea-wrapper"}>
         <textarea
@@ -194,6 +220,14 @@ const KeyboardWrapper = () => {
         layoutName={layout}
         onChange={onChange}
         onKeyPress={onKeyPress}
+        buttonTheme={
+          [
+            {
+              class: "myCustomClass",
+              buttons: "Q W E R T Y q w e r t y"
+            }
+          ]
+        }
         physicalKeyboardHighlight={true}
       />
     </div>
