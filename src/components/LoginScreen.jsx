@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const KeyboardWrapper = () => {
+const LoginScreen = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -11,4 +11,4 @@ const KeyboardWrapper = () => {
     );
 }
 
-export default KeyboardWrapper;
+export default LoginScreen;
