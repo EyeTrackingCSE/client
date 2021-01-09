@@ -11,6 +11,9 @@ import "../styles/KeyboardWrapper.css";
 import {
   ASYNC_GAZE_FOCUS_EVENT,
   ASYNC_LISTEN,
+  DEFAULT_DWELL_TIME_MS,
+  DEFAULT_REQUIRE_FOCUS,
+  DEFAULT_EYETRACKING_ON
 } from "../constants/index";
 
 const { ipcRenderer } = window.require("electron");
@@ -23,10 +26,12 @@ const KeyboardWrapper = () => {
 
   /* How long the user should "dwell" their focus on a key
     before accepting the key as input. Default 1000ms (1 second) */
-  const [dwellTimeMS, setDwellTimeMS] = useState(1000);
+  const [dwellTimeMS, setDwellTimeMS] = useState(DEFAULT_DWELL_TIME_MS);
 
   /* By default enable eyetracking keyboard */
-  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(false);
+  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(DEFAULT_EYETRACKING_ON);
+
+  const [requireHasFocus, setRequireHasFocus] = useState(DEFAULT_REQUIRE_FOCUS);
 
   /* object that logs timestamp of letters focused on */
   const [gazeLog, setGazeLog] = useState([]);

@@ -17,10 +17,10 @@ module.exports = {
      * will be set to false. In a second event, an event will be emit for 'f' with hasFocus
      * will be set to true.
      */
-    REQUIRE_FOCUS: true,
+    DEFAULT_REQUIRE_FOCUS: true,
 
     /**
      * By default the eyetracking is on.
      */
-    EYETRACKING_ON: true
+    DEFAULT_EYETRACKING_ON: false
 }
