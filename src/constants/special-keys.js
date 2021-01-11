@@ -9,5 +9,5 @@ module.exports = {
     "": " ",
     "tab": "    ",
     "shift": "",
-    "enter": "\n"
+    "< enter": "\n"
 }

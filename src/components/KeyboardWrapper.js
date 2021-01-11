@@ -89,9 +89,9 @@ const KeyboardWrapper = () => {
 
     console.log(args);
 
-    // key = "" when the key is the spacebar 
-    if (key == "")
-      key = " ";
+    // If the key is {space}, {tab}, etc.
+    if (specialkeys[key])
+      key = specialkeys[key];
 
     let update = [];
 
