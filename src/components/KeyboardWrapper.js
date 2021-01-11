@@ -84,10 +84,12 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = async (event, args) => {
-    if (!args.hasFocus)
+    if (requireHasFocus && !args.hasFocus)
       return;
 
     let { key, timestamp } = args
+
+    console.log(args);
 
     // key = "" when the key is the spacebar 
     if (key == "")
@@ -109,8 +111,6 @@ const KeyboardWrapper = () => {
     });
 
     let diff = timestamp - update[update.length - 2];
-
-    console.log(diff);
 
     let newInput = keyboard.current.getInput() + key;
 
@@ -196,8 +196,9 @@ const KeyboardWrapper = () => {
       startGazeFocusEventListener();
     } else {
       ipcRenderer.removeAllListeners(ASYNC_GAZE_FOCUS_EVENT);
+
     }
-  }, [eyetrackingIsOn])
+  }, [eyetrackingIsOn, requireHasFocus])
 
 
 
