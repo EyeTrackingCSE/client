@@ -5,7 +5,6 @@
  */
 
 module.exports = {
-    // Space bar 
     "": " ",
     "tab": "    ",
     "shift": "",

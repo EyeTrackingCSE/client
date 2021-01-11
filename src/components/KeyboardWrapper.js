@@ -82,9 +82,6 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = async (event, args) => {
-    if (requireHasFocus && !args.hasFocus)
-      return;
-
     let { key, timestamp } = args
 
     console.log(args);
@@ -97,10 +94,6 @@ const KeyboardWrapper = () => {
 
     // log the timestamp
     setGazeLog(logs => {
-      // update = {
-      //   ...logs,
-      //   [key]: timestamp
-      // }
       update = [
         ...logs,
         timestamp
@@ -109,8 +102,11 @@ const KeyboardWrapper = () => {
     });
 
     let diff = timestamp - update[update.length - 2];
-
+    
     let newInput = keyboard.current.getInput() + key;
+
+    if (requireHasFocus && !args.hasFocus)
+      return;
 
     setInput(newInput);
     keyboard.current.setInput(newInput);
