@@ -9,11 +9,9 @@ import 'react-toggle/style.css';
 import "../styles/KeyboardWrapper.css";
 
 import {
-  ASYNC_GAZE_FOCUS_EVENT,
-  ASYNC_LISTEN,
-  DEFAULT_DWELL_TIME_MS,
-  DEFAULT_REQUIRE_FOCUS,
-  DEFAULT_EYETRACKING_ON
+  events,
+  defaults,
+  specialkeys
 } from "../constants/index";
 
 const { ipcRenderer } = window.require("electron");
@@ -26,12 +24,12 @@ const KeyboardWrapper = () => {
 
   /* How long the user should "dwell" their focus on a key
     before accepting the key as input. Default 1000ms (1 second) */
-  const [dwellTimeMS, setDwellTimeMS] = useState(DEFAULT_DWELL_TIME_MS);
+  const [dwellTimeMS, setDwellTimeMS] = useState(defaults.DEFAULT_DWELL_TIME_MS);
 
   /* By default enable eyetracking keyboard */
-  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(DEFAULT_EYETRACKING_ON);
+  const [eyetrackingIsOn, setEyetrackingIsOn] = useState(defaults.DEFAULT_EYETRACKING_ON);
 
-  const [requireHasFocus, setRequireHasFocus] = useState(DEFAULT_REQUIRE_FOCUS);
+  const [requireHasFocus, setRequireHasFocus] = useState(defaults.DEFAULT_REQUIRE_FOCUS);
 
   /* object that logs timestamp of letters focused on */
   const [gazeLog, setGazeLog] = useState([]);
@@ -74,7 +72,7 @@ const KeyboardWrapper = () => {
     console.log(dimensions);
 
     // Start Tobii listen loop
-    ipcRenderer.send(ASYNC_LISTEN, dimensions);
+    ipcRenderer.send(events.ASYNC_LISTEN, dimensions);
   }
 
   /**
@@ -192,10 +190,10 @@ const KeyboardWrapper = () => {
    */
   useEffect(() => {
     if (eyetrackingIsOn) {
-      ipcRenderer.on(ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
+      ipcRenderer.on(events.ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
       startGazeFocusEventListener();
     } else {
-      ipcRenderer.removeAllListeners(ASYNC_GAZE_FOCUS_EVENT);
+      ipcRenderer.removeAllListeners(events.ASYNC_GAZE_FOCUS_EVENT);
 
     }
   }, [eyetrackingIsOn, requireHasFocus])

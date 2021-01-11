@@ -5,12 +5,8 @@ const url = require('url')
 const { fork } = require('child_process');
 
 const {
-    ASYNC_GAZE_FOCUS_EVENT,
-    ASYNC_LISTEN,
-    SYNC_SET_NEW_SCREEN,
-    OK,
-    ERROR,
-    SYNC_SET_SCREEN_SPACE
+    events,
+    status,
 } = require('./constants/index');
 
 let mainWindow
@@ -63,7 +59,7 @@ app.on('activate', () => {
  * Pushes keys to node-gyp module.
  */
 let screen;
-ipcMain.on(SYNC_SET_NEW_SCREEN, (event, arg) => {
+ipcMain.on(events.SYNC_SET_NEW_SCREEN, (event, arg) => {
     if (!arg.rectangles.length) {
         event.returnValue = ERROR;
         return;
@@ -71,27 +67,27 @@ ipcMain.on(SYNC_SET_NEW_SCREEN, (event, arg) => {
 
     screen = new eyetracking(arg.width, arg.height);
     screen.AddRectangles(arg.rectangles);
-    event.returnValue = OK;
+    event.returnValue = status.OK;
 });
 
 /**
  * Sets only the screen space size of the monitor.
  */
-ipcMain.on(SYNC_SET_SCREEN_SPACE, (event, arg) => {
+ipcMain.on(events.SYNC_SET_SCREEN_SPACE, (event, arg) => {
     if (screen === null) {
-        event.returnValue = constants.ERROR;
+        event.returnValue = status.ERROR;
         return;
     }
 
     if (!arg.height || !arg.width) {
-        event.returnValue = ERROR;
+        event.returnValue = status.ERROR;
         return;
     }
 
     screen.SetWidth(arg.width);
     screen.SetHeight(arg.height);
 
-    event.returnValue = OK;
+    event.returnValue = status.OK;
 });
 
 /**
@@ -102,7 +98,7 @@ ipcMain.on(SYNC_SET_SCREEN_SPACE, (event, arg) => {
  * using a event.reply() call. 
  */
 let eyetrackingProcess;
-ipcMain.on(ASYNC_LISTEN, (event, arg) => {
+ipcMain.on(events.ASYNC_LISTEN, (event, arg) => {
 
     // Check if there is a currently running eyetracking process
     // if so, murder it
@@ -131,6 +127,6 @@ ipcMain.on(ASYNC_LISTEN, (event, arg) => {
             ...evt,
             ...arg.rectangles[evt.id]
         }
-        event.reply(ASYNC_GAZE_FOCUS_EVENT, payload);
+        event.reply(events.ASYNC_GAZE_FOCUS_EVENT, payload);
     });
 });

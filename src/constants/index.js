@@ -2,8 +2,9 @@
  * Bundle all constants in one fat object
  */
 module.exports = {
-    ...require('./events'),
-    ...require('./status'),
-    ...require('./lettering'),
-    ...require('./defaults')
+    events: require('./events'),
+    status: require('./status'),
+    lettering: require('./lettering'),
+    defaults: require('./defaults'),
+    specialkeys: require('./special-keys')
 };
