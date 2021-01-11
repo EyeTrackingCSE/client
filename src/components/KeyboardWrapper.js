@@ -32,7 +32,7 @@ const KeyboardWrapper = () => {
   const [requireHasFocus, setRequireHasFocus] = useState(defaults.DEFAULT_REQUIRE_FOCUS);
 
   /* object that logs timestamp of letters focused on */
-  const [gazeLog, setGazeLog] = useState([]);
+  const [gazeLog, setGazeLog] = useState({});
 
   const keyboard = useRef();
 
@@ -90,26 +90,33 @@ const KeyboardWrapper = () => {
     if (specialkeys[key])
       key = specialkeys[key];
 
-    let update = [];
+    let timestampOfLastFocus = 0;
 
     // log the timestamp
     setGazeLog(logs => {
-      update = [
+      timestampOfLastFocus = logs[key] || timestamp;
+
+      return {
         ...logs,
-        timestamp
-      ];
-      return update;
+        [key]: timestamp
+      };
     });
 
-    let diff = timestamp - update[update.length - 2];
-    
-    let newInput = keyboard.current.getInput() + key;
+    let dwellTimeOfKey = timestamp - timestampOfLastFocus;
+    console.log("Dwell time: ", dwellTimeOfKey);
 
-    if (requireHasFocus && !args.hasFocus)
+
+    if (requireHasFocus && !args.hasFocus) {
+      delete gazeLog[key];
       return;
+    }
 
-    setInput(newInput);
-    keyboard.current.setInput(newInput);
+    if (dwellTimeOfKey >= dwellTimeMS) {
+      let newInput = keyboard.current.getInput() + key;
+      setInput(newInput);
+      keyboard.current.setInput(newInput);
+      console.log(key + " input accepted");
+    }
   }
 
   /**
