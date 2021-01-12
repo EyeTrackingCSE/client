@@ -21,6 +21,6 @@ process.on('message', (arg) => {
     screen.AddRectangles(arg.rectangles);
 
     screen.Listen((id, hasFocus, timestamp) => {
-        process.send({ id, hasFocus, timestamp, pid: process.pid });
+        process.send({ id, hasFocus, timestamp: Date.now(), pid: process.pid });
     });
 });
