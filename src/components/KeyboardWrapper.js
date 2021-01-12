@@ -103,19 +103,18 @@ const KeyboardWrapper = () => {
     });
 
     let dwellTimeOfKey = timestamp - timestampOfLastFocus;
-    console.log("Dwell time: ", dwellTimeOfKey);
+    console.log(`dwell time: ${dwellTimeOfKey}`);
 
 
-    if (requireHasFocus && !args.hasFocus) {
-      delete gazeLog[key];
-      return;
-    }
+    // if (requireHasFocus && !args.hasFocus) {
+    //   return;
+    // }
 
     if (dwellTimeOfKey >= dwellTimeMS) {
+      console.log(`${key} input accepted`);
       let newInput = keyboard.current.getInput() + key;
       setInput(newInput);
       keyboard.current.setInput(newInput);
-      console.log(key + " input accepted");
     }
   }
 
