@@ -86,6 +86,8 @@ const KeyboardWrapper = () => {
 
     console.log(args);
 
+    keyboard.current.addButtonTheme(key, "hg-gaze");
+
     // If the key is {space}, {tab}, etc.
     if (specialkeys[key])
       key = specialkeys[key];
@@ -226,14 +228,6 @@ const KeyboardWrapper = () => {
         layoutName={layout}
         onChange={onChange}
         onKeyPress={onKeyPress}
-        buttonTheme={
-          [
-            {
-              class: "myCustomClass",
-              buttons: "Q W E R T Y q w e r t y"
-            }
-          ]
-        }
         physicalKeyboardHighlight={true}
       />
     </div>
