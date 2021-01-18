@@ -52,12 +52,12 @@
 /*Hack the keyboard lib because I need these to be bigger */
 
 .hg-row {
-    margin-bottom: 20px !important;
+    /* margin-bottom: 20px !important; */
 }
 
 .hg-theme-default .hg-button {
-    height: 85px !important;
-    margin-right: 10px;
+    height: 90px !important;
+    /* margin-right: 10px; */
     font-size: 25px;
 }
 

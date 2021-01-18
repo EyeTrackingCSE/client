@@ -29,8 +29,6 @@ const KeyboardWrapper = () => {
   /* By default enable eyetracking keyboard */
   const [eyetrackingIsOn, setEyetrackingIsOn] = useState(defaults.DEFAULT_EYETRACKING_ON);
 
-  const [requireHasFocus, setRequireHasFocus] = useState(defaults.DEFAULT_REQUIRE_FOCUS);
-
   /* object that logs timestamp of letters focused on */
   const [gazeLog, setGazeLog] = useState({});
 
@@ -103,19 +101,12 @@ const KeyboardWrapper = () => {
       timestampOfLastFocus = logs[key] || timestamp;
 
       return {
-        ...logs,
         [key]: timestamp
       };
     });
 
     let dwellTimeOfKey = Math.abs(timestamp - timestampOfLastFocus);
     console.log(`dwell time: ${dwellTimeOfKey}`);
-
-
-    // If the use select a the hasFocus==true option.
-    // if (requireHasFocus && !args.hasFocus) {
-    //   return;
-    // }
 
     if (dwellTimeOfKey >= dwellTimeMS) {
       console.log(`%c${key} input accepted`, 'color: #bada55');
@@ -205,7 +196,7 @@ const KeyboardWrapper = () => {
       ipcRenderer.removeAllListeners(events.ASYNC_GAZE_FOCUS_EVENT);
 
     }
-  }, [eyetrackingIsOn, requireHasFocus])
+  }, [eyetrackingIsOn])
 
 
 
