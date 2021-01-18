@@ -1,6 +1,6 @@
 # Eyetracking Client
 
-![alt text](./media/123example.mov)
+![alt text](./media/123ex.gif)
 
 ## Getting Started
 
