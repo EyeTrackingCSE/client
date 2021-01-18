@@ -61,10 +61,6 @@
     font-size: 25px;
 }
 
-div:focus {
-    background-color: rgb(218, 220, 228)
-}
-
-.myCustomClass {
+.simple-keyboard.hg-layout-default .hg-button.hg-gaze {
     background-color: red;
 }

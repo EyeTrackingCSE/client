@@ -86,6 +86,12 @@ const KeyboardWrapper = () => {
 
     console.log(args);
 
+    if (args.hasFocus) {
+      keyboard.current.addButtonTheme(key, "hg-gaze");
+    } else {
+      keyboard.current.removeButtonTheme(key, "hg-gaze");
+    }
+
     // If the key is {space}, {tab}, etc.
     if (specialkeys[key])
       key = specialkeys[key];
@@ -106,6 +112,7 @@ const KeyboardWrapper = () => {
     console.log(`dwell time: ${dwellTimeOfKey}`);
 
 
+    // If the use select a the hasFocus==true option.
     // if (requireHasFocus && !args.hasFocus) {
     //   return;
     // }
@@ -226,14 +233,6 @@ const KeyboardWrapper = () => {
         layoutName={layout}
         onChange={onChange}
         onKeyPress={onKeyPress}
-        buttonTheme={
-          [
-            {
-              class: "myCustomClass",
-              buttons: "Q W E R T Y q w e r t y"
-            }
-          ]
-        }
         physicalKeyboardHighlight={true}
       />
     </div>
