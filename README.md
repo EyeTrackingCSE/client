@@ -1,5 +1,7 @@
 # Eyetracking Client
 
+![alt text](./media/123ex.gif)
+
 ## Getting Started
 
 This app provides a virtual keyboard that enables the user to type using a connected eyetracking device.

@@ -5,12 +5,14 @@
 
 module.exports = {
     /**
-     * By default, the user must focus on a key for 500ms (.5 seconds)
+     * By default, the user must focus on a key for the specifed number of MS
      * to capture that key as input.
      */
     DEFAULT_DWELL_TIME_MS: 500,
 
     /**
+     * DEPRECATED - not used ATM
+     * 
      * The eyetracking will capture a gaze event even if the user does not
      * focus on a particular key. Imagine gazing across the 'f' key
      * to reach the 'g' key. The eyetracking will emit an event for 'f', but hasFocus
