@@ -86,7 +86,11 @@ const KeyboardWrapper = () => {
 
     console.log(args);
 
-    keyboard.current.addButtonTheme(key, "hg-gaze");
+    if (args.hasFocus) {
+      keyboard.current.addButtonTheme(key, "hg-gaze");
+    } else {
+      keyboard.current.removeButtonTheme(key, "hg-gaze");
+    }
 
     // If the key is {space}, {tab}, etc.
     if (specialkeys[key])
@@ -108,6 +112,7 @@ const KeyboardWrapper = () => {
     console.log(`dwell time: ${dwellTimeOfKey}`);
 
 
+    // If the use select a the hasFocus==true option.
     // if (requireHasFocus && !args.hasFocus) {
     //   return;
     // }
