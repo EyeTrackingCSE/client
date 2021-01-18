@@ -62,5 +62,6 @@
 }
 
 .simple-keyboard.hg-layout-default .hg-button.hg-gaze {
-    background-color: red;
+    background-color: rgb(48, 209, 88);
+    color: #ffffff;
 }

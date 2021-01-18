@@ -108,7 +108,7 @@ const KeyboardWrapper = () => {
       };
     });
 
-    let dwellTimeOfKey = timestamp - timestampOfLastFocus;
+    let dwellTimeOfKey = Math.abs(timestamp - timestampOfLastFocus);
     console.log(`dwell time: ${dwellTimeOfKey}`);
 
 
@@ -118,7 +118,7 @@ const KeyboardWrapper = () => {
     // }
 
     if (dwellTimeOfKey >= dwellTimeMS) {
-      console.log(`${key} input accepted`);
+      console.log(`%c${key} input accepted`, 'color: #bada55');
       let newInput = keyboard.current.getInput() + key;
       setInput(newInput);
       keyboard.current.setInput(newInput);
