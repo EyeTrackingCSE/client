@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 import Keyboard from 'react-simple-keyboard';
-import Toggle from 'react-toggle'
+import Toggle from 'react-toggle';
 
 import 'react-simple-keyboard/build/css/index.css';
 import 'react-toggle/style.css';
