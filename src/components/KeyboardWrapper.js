@@ -84,14 +84,11 @@ const KeyboardWrapper = () => {
 
     console.log(args);
 
-    // If the key is {space}, {tab}, etc.
-    if (specialkeys[key])
-      key = specialkeys[key];
-
+    let cssSelector = (specialkeys[key]) ? specialkeys[key].id : key;
     if (args.hasFocus) {
-      keyboard.current.addButtonTheme(key, "hg-gaze");
+      keyboard.current.addButtonTheme(cssSelector, "hg-gaze");
     } else {
-      keyboard.current.removeButtonTheme(key, "hg-gaze");
+      keyboard.current.removeButtonTheme(cssSelector, "hg-gaze");
     }
 
 
@@ -111,7 +108,15 @@ const KeyboardWrapper = () => {
 
     if (dwellTimeOfKey >= dwellTimeMS) {
       console.log(`%c${key} input accepted`, 'color: #bada55');
-      let newInput = keyboard.current.getInput() + key;
+
+      let newInput = keyboard.current.getInput();
+
+      if (specialkeys[key]) {
+        newInput = specialkeys[key].fn(newInput);
+      } else {
+        newInput = newInput + key;
+      }
+
       setInput(newInput);
       keyboard.current.setInput(newInput);
     }
