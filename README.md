@@ -13,3 +13,9 @@ This app provides a virtual keyboard that enables the user to type using a conne
 
 ### Running the app
 ```npm run start```
+
+### About
+
+This app leverages the [eyetracking](https://github.com/EyeTrackingCSE/eyetracking) to bind Tobii `GazeFocusEvent`s to a virtual keyboard, enabling the user to type using their eyes.
+
+The app is built using [React.js](https://reactjs.org/) in conjunction with [Electron.js](https://www.electronjs.org/).
