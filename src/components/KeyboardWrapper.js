@@ -84,15 +84,16 @@ const KeyboardWrapper = () => {
 
     console.log(args);
 
+    // If the key is {space}, {tab}, etc.
+    if (specialkeys[key])
+      key = specialkeys[key];
+
     if (args.hasFocus) {
       keyboard.current.addButtonTheme(key, "hg-gaze");
     } else {
       keyboard.current.removeButtonTheme(key, "hg-gaze");
     }
 
-    // If the key is {space}, {tab}, etc.
-    if (specialkeys[key])
-      key = specialkeys[key];
 
     let timestampOfLastFocus = 0;
 
