@@ -57,7 +57,7 @@
 
 .simple-keyboard.hg-layout-default .hg-button.hg-gaze {
     background-color: default;
-    animation: fadeOut .5s;
+    animation: fadeOut .75s;
 }
 
 @keyframes fadeOut {

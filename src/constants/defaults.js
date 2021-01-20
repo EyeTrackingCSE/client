@@ -8,7 +8,7 @@ module.exports = {
      * By default, the user must focus on a key for the specifed number of MS
      * to capture that key as input.
      */
-    DEFAULT_DWELL_TIME_MS: 500,
+    DEFAULT_DWELL_TIME_MS: process.env.DWELL || 500,
 
     /**
      * DEPRECATED - not used ATM
