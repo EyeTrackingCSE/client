@@ -1,5 +1,4 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
-const eyetracking = require('eyetracking');
 const path = require('path')
 const url = require('url')
 const { fork } = require('child_process');
@@ -52,45 +51,6 @@ app.on('activate', () => {
 })
 
 /**
- * Takes an object containing width, height, and an array of objects denoting
- * screen space coordinates for each key on virtual keyboard
- * 
- * Actually creates a new eyetracking instance, so old data is disregarded.
- * Pushes keys to node-gyp module.
- */
-let screen;
-ipcMain.on(events.SYNC_SET_NEW_SCREEN, (event, arg) => {
-    if (!arg.rectangles.length) {
-        event.returnValue = ERROR;
-        return;
-    }
-
-    screen = new eyetracking(arg.width, arg.height);
-    screen.AddRectangles(arg.rectangles);
-    event.returnValue = status.OK;
-});
-
-/**
- * Sets only the screen space size of the monitor.
- */
-ipcMain.on(events.SYNC_SET_SCREEN_SPACE, (event, arg) => {
-    if (screen === null) {
-        event.returnValue = status.ERROR;
-        return;
-    }
-
-    if (!arg.height || !arg.width) {
-        event.returnValue = status.ERROR;
-        return;
-    }
-
-    screen.SetWidth(arg.width);
-    screen.SetHeight(arg.height);
-
-    event.returnValue = status.OK;
-});
-
-/**
  * Kicks off the tobii.listen() loop.
  * 
  * Each time the eyetracking recognizes a new focus event,
@@ -115,18 +75,16 @@ ipcMain.on(events.ASYNC_LISTEN, (event, arg) => {
     console.log(`Forking eyetracking process (${eyetrackingProcess.pid || 'no pid found'})`);
     console.log(`(${eyetrackingProcess.pid}): w${arg.width} h${arg.height} r${arg.rectangles.length}`);
 
-    // Send the screen metadata
+    // Send the screen metadata to start the listen loop.
     eyetrackingProcess.send(arg);
 
     // When the forked process emits a message, push to the render process
     eyetrackingProcess.on('message', (evt) => {
-        // the id of the event corresponds to an index in
-        // arg.rectangles. combine the rectangle focused and the evt
-        // into a single object to send back to the render process
         let payload = {
             ...evt,
             ...arg.rectangles[evt.id]
-        }
+        };
+
         event.reply(events.ASYNC_GAZE_FOCUS_EVENT, payload);
     });
 });
