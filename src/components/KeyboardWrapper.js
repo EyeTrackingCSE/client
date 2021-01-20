@@ -79,7 +79,7 @@ const KeyboardWrapper = () => {
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
-  const onGazeFocusEvent = async (event, args) => {
+  const onGazeFocusEvent = (event, args) => {
     let { key, timestamp } = args
 
     console.log(args);
