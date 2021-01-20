@@ -57,11 +57,28 @@
 
 .hg-theme-default .hg-button {
     height: 90px !important;
-    /* margin-right: 10px; */
     font-size: 25px;
 }
 
 .simple-keyboard.hg-layout-default .hg-button.hg-gaze {
-    background-color: rgb(48, 209, 88);
-    color: #ffffff;
+    background-color: default;
+    animation: fadeOut .5s;
+}
+
+@keyframes fadeOut {
+    0% {
+        background-color: rgb(48, 209, 88);
+    }
+    25% {
+        background-color: rgba(48, 209, 88, 0.75);
+    }
+    50% {
+        background-color: rgba(48, 209, 88, 0.50);
+    }
+    75% {
+        background-color: rgba(48, 209, 88, 0.25);
+    }
+    100% {
+        background-color: default;
+    }
 }
