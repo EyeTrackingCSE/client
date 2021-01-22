@@ -81,14 +81,16 @@ const KeyboardWrapper = () => {
    * @param {string} keyPressed key pressed on virtual keyboard
    * @param {boolean} hasFocus true if the users gaze is focused on keyPressed
    */
-  const updateKeyboardStyles = (keyPressed, hasFocus) => {
-    let cssSelector = (specialkeys[key]) ? specialkeys[key].id : key;
+  const updateKeyboardStyles = (key, hasFocus) => {
+    let cssSelector = specialkeys[key] ? specialkeys[key].id : key;
+
     if (hasFocus) {
       keyboard.current.addButtonTheme(cssSelector, "hg-gaze");
     } else {
       keyboard.current.removeButtonTheme(cssSelector, "hg-gaze");
     }
   }
+
   /**
    * When the user focuses on a key, 
    * update the input variabe.
@@ -96,8 +98,8 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
-    console.log(args);
-    updateKeyboardStyles(key, args.hasFocus);
+    let { key, timestamp } = args;
+    updateKeyboardStyles(args.key, args.hasFocus);
 
     let timestampOfLastFocus = 0;
 
@@ -111,7 +113,6 @@ const KeyboardWrapper = () => {
     });
 
     let dwellTimeOfKey = Math.abs(timestamp - timestampOfLastFocus);
-    console.log(`dwell time: ${dwellTimeOfKey}`);
 
     if (dwellTimeOfKey >= dwellTimeMS) {
       console.log(`%c${key} input accepted`, 'color: #bada55');
