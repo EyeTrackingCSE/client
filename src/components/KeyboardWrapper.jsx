@@ -208,7 +208,8 @@ const KeyboardWrapper = () => {
       startGazeFocusEventListener();
     } else {
       ipcRenderer.removeAllListeners(events.ASYNC_GAZE_FOCUS_EVENT);
-
+      keyboard.current.recurseButtons(buttonElement =>
+        updateKeyboardStyles(buttonElement.innerText, false));
     }
   }, [eyetrackingIsOn])
 
