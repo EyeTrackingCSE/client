@@ -91,6 +91,16 @@ const KeyboardWrapper = () => {
     }
   }
 
+  const computeDwellTime = (key, timestamp) => {
+    let timestampOfLastFocus = 0;
+
+    setGazeLog(logs => {
+      timestampOfLastFocus = logs[key] || timestamp;
+      return { [key]: timestamp }
+    });
+    return Math.abs(timestamp - timestampOfLastFocus);
+  }
+
   /**
    * When the user focuses on a key, 
    * update the input variabe.
@@ -101,18 +111,7 @@ const KeyboardWrapper = () => {
     let { key, timestamp } = args;
     updateKeyboardStyles(args.key, args.hasFocus);
 
-    let timestampOfLastFocus = 0;
-
-    // log the timestamp
-    setGazeLog(logs => {
-      timestampOfLastFocus = logs[key] || timestamp;
-
-      return {
-        [key]: timestamp
-      };
-    });
-
-    let dwellTimeOfKey = Math.abs(timestamp - timestampOfLastFocus);
+    let dwellTimeOfKey = computeDwellTime(args.key, args.timestamp);
 
     if (dwellTimeOfKey >= dwellTimeMS) {
       console.log(`%c${key} input accepted`, 'color: #bada55');
@@ -200,7 +199,7 @@ const KeyboardWrapper = () => {
    * to kickstart a new tobii eyetracking session
    * 
    * If they turn eyetracking off, it unhooks the ASYNC_GAZE_FOCUS_EVENT
-   * listener from IPC.
+   * listener from IPC. Also rmemove lingering CSS from keyboard
    */
   useEffect(() => {
     if (eyetrackingIsOn) {
