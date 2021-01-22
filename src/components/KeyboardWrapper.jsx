@@ -91,6 +91,15 @@ const KeyboardWrapper = () => {
     }
   }
 
+  /**
+   * Calculate the time a key was dwelled on.
+   * if the user has NOT moved their gaze away from the key,
+   * this function returns 0.
+   * 
+   * Otherwise it returns the dwell time in seconds.
+   * @param {string} key key that was pressed
+   * @param {number} timestamp UNIX timestamp of when key was looked at.
+   */
   const computeDwellTime = (key, timestamp) => {
     let timestampOfLastFocus = 0;
 
@@ -98,6 +107,7 @@ const KeyboardWrapper = () => {
       timestampOfLastFocus = logs[key] || timestamp;
       return { [key]: timestamp }
     });
+
     return Math.abs(timestamp - timestampOfLastFocus);
   }
 
@@ -108,20 +118,18 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
-    let { key, timestamp } = args;
     updateKeyboardStyles(args.key, args.hasFocus);
 
     let dwellTimeOfKey = computeDwellTime(args.key, args.timestamp);
+    let keyAcceptedAsInput = dwellTimeOfKey >= dwellTimeMS;
 
-    if (dwellTimeOfKey >= dwellTimeMS) {
-      console.log(`%c${key} input accepted`, 'color: #bada55');
-
+    if (keyAcceptedAsInput) {
       let newInput = keyboard.current.getInput();
 
-      if (specialkeys[key]) {
-        newInput = specialkeys[key].fn(newInput);
+      if (specialkeys[args.key]) {
+        newInput = specialkeys[args.key].fn(newInput);
       } else {
-        newInput = newInput + key;
+        newInput = newInput + args.key;
       }
 
       setInput(newInput);
