@@ -74,47 +74,62 @@ const KeyboardWrapper = () => {
   }
 
   /**
+   * Updates CSS of keyboard. If a key is focused on,
+   * apply the hg-gaze animation to it.
+   * 
+   * If the key is not focused on, clear the hg-gaze animation.
+   * @param {string} keyPressed key pressed on virtual keyboard
+   * @param {boolean} hasFocus true if the users gaze is focused on keyPressed
+   */
+  const updateKeyboardStyles = (key, hasFocus) => {
+    let cssSelector = specialkeys[key] ? specialkeys[key].id : key;
+
+    if (hasFocus) {
+      keyboard.current.addButtonTheme(cssSelector, "hg-gaze");
+    } else {
+      keyboard.current.removeButtonTheme(cssSelector, "hg-gaze");
+    }
+  }
+
+  /**
+   * Calculate the time a key was dwelled on.
+   * if the user has NOT moved their gaze away from the key,
+   * this function returns 0.
+   * 
+   * Otherwise it returns the dwell time in seconds.
+   * @param {string} key key that was pressed
+   * @param {number} timestamp UNIX timestamp of when key was looked at.
+   */
+  const computeDwellTime = (key, timestamp) => {
+    let timestampOfLastFocus = 0;
+
+    setGazeLog(logs => {
+      timestampOfLastFocus = logs[key] || timestamp;
+      return { [key]: timestamp }
+    });
+
+    return Math.abs(timestamp - timestampOfLastFocus);
+  }
+
+  /**
    * When the user focuses on a key, 
    * update the input variabe.
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
-    let { key, timestamp } = args
+    updateKeyboardStyles(args.key, args.hasFocus);
 
-    console.log(args);
+    let dwellTimeOfKey = computeDwellTime(args.key, args.timestamp);
+    let keyAcceptedAsInput = dwellTimeOfKey >= dwellTimeMS;
 
-    let cssSelector = (specialkeys[key]) ? specialkeys[key].id : key;
-    if (args.hasFocus) {
-      keyboard.current.addButtonTheme(cssSelector, "hg-gaze");
-    } else {
-      keyboard.current.removeButtonTheme(cssSelector, "hg-gaze");
-    }
-
-
-    let timestampOfLastFocus = 0;
-
-    // log the timestamp
-    setGazeLog(logs => {
-      timestampOfLastFocus = logs[key] || timestamp;
-
-      return {
-        [key]: timestamp
-      };
-    });
-
-    let dwellTimeOfKey = Math.abs(timestamp - timestampOfLastFocus);
-    console.log(`dwell time: ${dwellTimeOfKey}`);
-
-    if (dwellTimeOfKey >= dwellTimeMS) {
-      console.log(`%c${key} input accepted`, 'color: #bada55');
-
+    if (keyAcceptedAsInput) {
       let newInput = keyboard.current.getInput();
 
-      if (specialkeys[key]) {
-        newInput = specialkeys[key].fn(newInput);
+      if (specialkeys[args.key]) {
+        newInput = specialkeys[args.key].fn(newInput);
       } else {
-        newInput = newInput + key;
+        newInput = newInput + args.key;
       }
 
       setInput(newInput);
@@ -192,7 +207,7 @@ const KeyboardWrapper = () => {
    * to kickstart a new tobii eyetracking session
    * 
    * If they turn eyetracking off, it unhooks the ASYNC_GAZE_FOCUS_EVENT
-   * listener from IPC.
+   * listener from IPC. Also rmemove lingering CSS from keyboard
    */
   useEffect(() => {
     if (eyetrackingIsOn) {
@@ -200,7 +215,8 @@ const KeyboardWrapper = () => {
       startGazeFocusEventListener();
     } else {
       ipcRenderer.removeAllListeners(events.ASYNC_GAZE_FOCUS_EVENT);
-
+      keyboard.current.recurseButtons(buttonElement =>
+        updateKeyboardStyles(buttonElement.innerText, false));
     }
   }, [eyetrackingIsOn])
 
