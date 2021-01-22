@@ -74,23 +74,30 @@ const KeyboardWrapper = () => {
   }
 
   /**
+   * Updates CSS of keyboard. If a key is focused on,
+   * apply the hg-gaze animation to it.
+   * 
+   * If the key is not focused on, clear the hg-gaze animation.
+   * @param {string} keyPressed key pressed on virtual keyboard
+   * @param {boolean} hasFocus true if the users gaze is focused on keyPressed
+   */
+  const updateKeyboardStyles = (keyPressed, hasFocus) => {
+    let cssSelector = (specialkeys[key]) ? specialkeys[key].id : key;
+    if (hasFocus) {
+      keyboard.current.addButtonTheme(cssSelector, "hg-gaze");
+    } else {
+      keyboard.current.removeButtonTheme(cssSelector, "hg-gaze");
+    }
+  }
+  /**
    * When the user focuses on a key, 
    * update the input variabe.
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
-    let { key, timestamp } = args
-
     console.log(args);
-
-    let cssSelector = (specialkeys[key]) ? specialkeys[key].id : key;
-    if (args.hasFocus) {
-      keyboard.current.addButtonTheme(cssSelector, "hg-gaze");
-    } else {
-      keyboard.current.removeButtonTheme(cssSelector, "hg-gaze");
-    }
-
+    updateKeyboardStyles(key, args.hasFocus);
 
     let timestampOfLastFocus = 0;
 
