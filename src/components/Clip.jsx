@@ -1,14 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { defaults } from '../constants';
 
 const Clip = (props) => {
-    if (!props.string)
+    if (props.string === null || props.string === undefined)
         throw new Error("string cannot be null/undefined");
 
     const onClipButtonClick = () => {
         if (props.onBeforeClip)
             props.onBeforeClip(props.string);
 
-        navigator.clipboard.writeText(this.state.working);
+        navigator.clipboard.writeText(props.string);
         
         if (props.onAfterClip)
             props.onAfterClip(props.string);
@@ -21,4 +22,4 @@ const Clip = (props) => {
     );
 };
 
-export const Clip;
+export default Clip;

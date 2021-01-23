@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 
 import Keyboard from 'react-simple-keyboard';
 import Toggle from 'react-toggle';
+import Clip from './Clip';
 
 import 'react-simple-keyboard/build/css/index.css';
 import 'react-toggle/style.css';
@@ -175,6 +176,11 @@ const KeyboardWrapper = () => {
     setEyetrackingIsOn(event.target.checked);
   }
 
+  const onAfterClip = clippedString => {
+    setInput('');
+    keyboard.current.setInput('');
+  };
+
   /**
    * Gets called when component mounts
    * 
@@ -212,6 +218,9 @@ const KeyboardWrapper = () => {
   return (
     <div className={"component-wrapper"}>
       <div className={"settings-bar"}>
+        <Clip
+          string={input}
+          onAfterClip={onAfterClip} />
         <Toggle
           className={"eyetracking-toggle"}
           id='eid'
