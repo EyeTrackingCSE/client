@@ -43,6 +43,10 @@
     border: 1px solid transparent;
 }
 
+.clip-button {
+    float: right;
+}
+
 
 /*Hack the keyboard lib because I need these to be bigger */
 

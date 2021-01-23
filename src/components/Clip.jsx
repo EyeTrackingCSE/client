@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { defaults } from '../constants';
+
+import "../styles/Clip.css";
 
 const Clip = (props) => {
     if (props.string === null || props.string === undefined)
@@ -16,9 +17,9 @@ const Clip = (props) => {
     }
 
     return (
-        <button onClick={onClipButtonClick}>
+        <a onClick={onClipButtonClick} className={"clip"}>
             Clip
-        </button>
+        </a>
     );
 };
 
