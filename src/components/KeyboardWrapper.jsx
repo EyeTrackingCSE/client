@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 
 import Keyboard from 'react-simple-keyboard';
 import Toggle from 'react-toggle';
+import Clip from './Clip';
 
 import 'react-simple-keyboard/build/css/index.css';
 import 'react-toggle/style.css';
@@ -18,18 +19,9 @@ const { ipcRenderer } = window.require("electron");
 
 const KeyboardWrapper = () => {
   const [input, setInput] = useState("");
-
-  /* Layout of the keyboard, used for pivoting between shift and unshift */
   const [layout, setLayout] = useState("default");
-
-  /* How long the user should "dwell" their focus on a key
-    before accepting the key as input. Default 1000ms (1 second) */
   const [dwellTimeMS, setDwellTimeMS] = useState(defaults.DEFAULT_DWELL_TIME_MS);
-
-  /* By default enable eyetracking keyboard */
   const [eyetrackingIsOn, setEyetrackingIsOn] = useState(defaults.DEFAULT_EYETRACKING_ON);
-
-  /* object that logs timestamp of letters focused on */
   const [gazeLog, setGazeLog] = useState({});
 
   const keyboard = useRef();
@@ -112,8 +104,7 @@ const KeyboardWrapper = () => {
   }
 
   /**
-   * When the user focuses on a key, 
-   * update the input variabe.
+   * Called when the user looks at a key.
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
@@ -126,11 +117,10 @@ const KeyboardWrapper = () => {
     if (keyAcceptedAsInput) {
       let newInput = keyboard.current.getInput();
 
-      if (specialkeys[args.key]) {
+      if (specialkeys[args.key])
         newInput = specialkeys[args.key].fn(newInput);
-      } else {
+      else
         newInput = newInput + args.key;
-      }
 
       setInput(newInput);
       keyboard.current.setInput(newInput);
@@ -186,6 +176,11 @@ const KeyboardWrapper = () => {
     setEyetrackingIsOn(event.target.checked);
   }
 
+  const onAfterClip = clippedString => {
+    setInput('');
+    keyboard.current.setInput('');
+  };
+
   /**
    * Gets called when component mounts
    * 
@@ -223,6 +218,9 @@ const KeyboardWrapper = () => {
   return (
     <div className={"component-wrapper"}>
       <div className={"settings-bar"}>
+        <Clip
+          string={input}
+          onAfterClip={onAfterClip} />
         <Toggle
           className={"eyetracking-toggle"}
           id='eid'
