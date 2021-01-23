@@ -47,12 +47,13 @@
 /*Hack the keyboard lib because I need these to be bigger */
 
 .hg-row {
-    /* margin-bottom: 20px !important; */
+    margin-bottom: 10px !important;
 }
 
 .hg-theme-default .hg-button {
     height: 90px !important;
     font-size: 25px;
+    margin-right: 10px !important;
 }
 
 .simple-keyboard.hg-layout-default .hg-button.hg-gaze {
