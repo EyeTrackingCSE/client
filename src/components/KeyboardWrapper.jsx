@@ -220,17 +220,15 @@ const KeyboardWrapper = () => {
     }
   }, [eyetrackingIsOn])
 
-
-
   return (
     <div className={"component-wrapper"}>
       <div className={"settings-bar"}>
-        <label htmlFor='eid' className={"eyetracking-toggle-label"}>Eyetracking</label>
         <Toggle
           className={"eyetracking-toggle"}
           id='eid'
           defaultChecked={eyetrackingIsOn}
           onChange={onEyeTrackingIsOnChange} />
+        <label htmlFor='eid' className={"eyetracking-toggle-label"}>Eyetracking</label>
       </div>
       <div className={"textarea-wrapper"}>
         <textarea
