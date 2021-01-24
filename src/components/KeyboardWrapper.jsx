@@ -112,6 +112,7 @@ const KeyboardWrapper = () => {
    */
   const onGazeFocusEvent = (event, args) => {
     updateKeyboardStyles(args.key, args.hasFocus);
+    console.log(dwellTimeMS);
 
     let dwellTimeOfKey = computeDwellTime(args.key, args.timestamp);
     let keyAcceptedAsInput = dwellTimeOfKey >= dwellTimeMS;
@@ -183,6 +184,10 @@ const KeyboardWrapper = () => {
     keyboard.current.setInput('');
   };
 
+  const onDwellTimeSliderChange = newDwellTimeMS => {
+    setDwellTimeMS(newDwellTimeMS);
+  }
+
   /**
    * Gets called when component mounts
    * 
@@ -207,15 +212,16 @@ const KeyboardWrapper = () => {
    * listener from IPC. Also rmemove lingering CSS from keyboard
    */
   useEffect(() => {
+    ipcRenderer.removeAllListeners(events.ASYNC_GAZE_FOCUS_EVENT);
+
     if (eyetrackingIsOn) {
       ipcRenderer.on(events.ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
       startGazeFocusEventListener();
     } else {
-      ipcRenderer.removeAllListeners(events.ASYNC_GAZE_FOCUS_EVENT);
       keyboard.current.recurseButtons(buttonElement =>
         updateKeyboardStyles(buttonElement.innerText, false));
     }
-  }, [eyetrackingIsOn])
+  }, [eyetrackingIsOn, dwellTimeMS])
 
   return (
     <div className={"component-wrapper"}>
@@ -223,7 +229,8 @@ const KeyboardWrapper = () => {
         <Clip
           string={input}
           onAfterClip={onAfterClip} />
-        <SliderWrapper />
+        <SliderWrapper
+          onChange={onDwellTimeSliderChange} />
         <label htmlFor='eid' className={"eyetracking-toggle-label"}>Eyetracking</label>
         <Toggle
           className={"eyetracking-toggle"}
