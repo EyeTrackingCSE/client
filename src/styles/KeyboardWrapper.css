@@ -56,8 +56,8 @@
     margin-right: 10px !important;
 }
 
-.simple-keyboard.hg-layout-default .hg-button.hg-gaze0 {
-    animation: fadeOut .05s;
+.simple-keyboard.hg-layout-default .hg-button.hg-gaze1 {
+    animation: fadeOut .01s;
 }
 
 .simple-keyboard.hg-layout-default .hg-button.hg-gaze250 {
