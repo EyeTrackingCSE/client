@@ -5,10 +5,14 @@
 
 module.exports = {
     /**
-     * By default, the user must focus on a key for the specifed number of MS
-     * to capture that key as input.
+     * Available dwell time configuration in MS
      */
-    DEFAULT_DWELL_TIME_MS: process.env.DWELL || 500,
+    DEFAULT_DWELL_TIME_OPTIONS_MS: [0, 250, 500, 750, 1000],
+
+    /**
+     * Index of default dwell time.
+     */
+    DEFAULT_DWELL_TIME_INDEX: 3,
 
     /**
      * DEPRECATED - not used ATM
@@ -22,7 +26,7 @@ module.exports = {
     DEFAULT_REQUIRE_FOCUS: true,
 
     /**
-     * By default the eyetracking is on.
+     * By default whether to listen for gaze data.
      */
     DEFAULT_EYETRACKING_ON: false
 }

@@ -20,7 +20,7 @@ const { ipcRenderer } = window.require("electron");
 const KeyboardWrapper = () => {
   const [input, setInput] = useState("");
   const [layout, setLayout] = useState("default");
-  const [dwellTimeMS, setDwellTimeMS] = useState(defaults.DEFAULT_DWELL_TIME_MS);
+  const [dwellTimeMS, setDwellTimeMS] = useState(defaults.DEFAULT_DWELL_TIME_OPTIONS_MS[defaults.DEFAULT_DWELL_TIME_INDEX]);
   const [eyetrackingIsOn, setEyetrackingIsOn] = useState(defaults.DEFAULT_EYETRACKING_ON);
   const [gazeLog, setGazeLog] = useState({});
 
@@ -75,11 +75,12 @@ const KeyboardWrapper = () => {
    */
   const updateKeyboardStyles = (key, hasFocus) => {
     let cssSelector = specialkeys[key] ? specialkeys[key].id : key;
+    let cssClass = `hg-gaze${dwellTimeMS}`
 
     if (hasFocus) {
-      keyboard.current.addButtonTheme(cssSelector, "hg-gaze");
+      keyboard.current.addButtonTheme(cssSelector, cssClass);
     } else {
-      keyboard.current.removeButtonTheme(cssSelector, "hg-gaze");
+      keyboard.current.removeButtonTheme(cssSelector, cssClass);
     }
   }
 
