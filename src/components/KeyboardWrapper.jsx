@@ -220,10 +220,10 @@ const KeyboardWrapper = () => {
   return (
     <div className={"component-wrapper"}>
       <div className={"settings-bar"}>
-        <SliderWrapper />
         <Clip
           string={input}
           onAfterClip={onAfterClip} />
+        <SliderWrapper />
         <label htmlFor='eid' className={"eyetracking-toggle-label"}>Eyetracking</label>
         <Toggle
           className={"eyetracking-toggle"}

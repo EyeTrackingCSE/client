@@ -1,4 +1,6 @@
 .wrapper {
-    width: 100px;
-    margin: 12px;
+    width: 1000px;
+    display: inline-block;
+    margin-left: 50px;
+    margin-right: 50px;
 }
