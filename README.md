@@ -1,6 +1,6 @@
 # Eyetracking Client
 
-![alt text](./media/helloex.gif)
+![alt text](./media/helloex2.gif)
 
 ## Getting Started
 

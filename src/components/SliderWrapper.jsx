@@ -53,6 +53,9 @@ const SliderWrapper = (props) => {
         let valueMS = value * 10;
         console.log(valueMS);
 
+        if (valueMS === 0)
+            valueMS = 1;
+
         if (props.onChange)
             props.onChange(valueMS);
     };
