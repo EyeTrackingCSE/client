@@ -60,8 +60,6 @@ const KeyboardWrapper = () => {
       rectangles: rectangles
     };
 
-    console.log(dimensions);
-
     // Start Tobii listen loop
     ipcRenderer.send(events.ASYNC_LISTEN, dimensions);
   }
@@ -112,7 +110,6 @@ const KeyboardWrapper = () => {
    */
   const onGazeFocusEvent = (event, args) => {
     updateKeyboardStyles(args.key, args.hasFocus);
-    console.log(dwellTimeMS);
 
     let dwellTimeOfKey = computeDwellTime(args.key, args.timestamp);
     let keyAcceptedAsInput = dwellTimeOfKey >= dwellTimeMS;

@@ -29,6 +29,10 @@ const handle = props => {
     );
 };
 
+/**
+ * This is an interactive slider to adjust the dwelltime in KeyboardWrapper
+ * @param {*} props 
+ */
 const SliderWrapper = (props) => {
 
     /**
@@ -41,7 +45,7 @@ const SliderWrapper = (props) => {
 
         // Need to divide the numbers by 10 because rc-slider
         // computes its width using the nominal value of the max mark.
-        marksArray.map(cur => marks[cur / 10] = cur);
+        marksArray.map(cur => marks[cur / 10] = { style: { display: 'none' }, label: cur });
         return marks;
     }
 
@@ -63,6 +67,7 @@ const SliderWrapper = (props) => {
             step={null}
             handle={handle}
         />
+
     );
 };
 
