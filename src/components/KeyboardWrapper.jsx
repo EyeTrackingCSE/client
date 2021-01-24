@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Keyboard from 'react-simple-keyboard';
 import Toggle from 'react-toggle';
 import Clip from './Clip';
+import SliderWrapper from './SliderWrapper';
 
 import 'react-simple-keyboard/build/css/index.css';
 import 'react-toggle/style.css';
@@ -219,6 +220,7 @@ const KeyboardWrapper = () => {
   return (
     <div className={"component-wrapper"}>
       <div className={"settings-bar"}>
+        <SliderWrapper />
         <Clip
           string={input}
           onAfterClip={onAfterClip} />
