@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Keyboard from 'react-simple-keyboard';
 import Toggle from 'react-toggle';
 import Clip from './Clip';
+import SliderWrapper from './SliderWrapper';
 
 import 'react-simple-keyboard/build/css/index.css';
 import 'react-toggle/style.css';
@@ -59,8 +60,6 @@ const KeyboardWrapper = () => {
       rectangles: rectangles
     };
 
-    console.log(dimensions);
-
     // Start Tobii listen loop
     ipcRenderer.send(events.ASYNC_LISTEN, dimensions);
   }
@@ -75,11 +74,12 @@ const KeyboardWrapper = () => {
    */
   const updateKeyboardStyles = (key, hasFocus) => {
     let cssSelector = specialkeys[key] ? specialkeys[key].id : key;
+    let cssClass = `hg-gaze${dwellTimeMS}`
 
     if (hasFocus) {
-      keyboard.current.addButtonTheme(cssSelector, "hg-gaze");
+      keyboard.current.addButtonTheme(cssSelector, cssClass);
     } else {
-      keyboard.current.removeButtonTheme(cssSelector, "hg-gaze");
+      keyboard.current.removeButtonTheme(cssSelector, cssClass);
     }
   }
 
@@ -181,6 +181,10 @@ const KeyboardWrapper = () => {
     keyboard.current.setInput('');
   };
 
+  const onDwellTimeSliderChange = newDwellTimeMS => {
+    setDwellTimeMS(newDwellTimeMS);
+  }
+
   /**
    * Gets called when component mounts
    * 
@@ -205,15 +209,16 @@ const KeyboardWrapper = () => {
    * listener from IPC. Also rmemove lingering CSS from keyboard
    */
   useEffect(() => {
+    ipcRenderer.removeAllListeners(events.ASYNC_GAZE_FOCUS_EVENT);
+
     if (eyetrackingIsOn) {
       ipcRenderer.on(events.ASYNC_GAZE_FOCUS_EVENT, onGazeFocusEvent);
       startGazeFocusEventListener();
     } else {
-      ipcRenderer.removeAllListeners(events.ASYNC_GAZE_FOCUS_EVENT);
       keyboard.current.recurseButtons(buttonElement =>
         updateKeyboardStyles(buttonElement.innerText, false));
     }
-  }, [eyetrackingIsOn])
+  }, [eyetrackingIsOn, dwellTimeMS])
 
   return (
     <div className={"component-wrapper"}>
@@ -221,6 +226,8 @@ const KeyboardWrapper = () => {
         <Clip
           string={input}
           onAfterClip={onAfterClip} />
+        <SliderWrapper
+          onChange={onDwellTimeSliderChange} />
         <label htmlFor='eid' className={"eyetracking-toggle-label"}>Eyetracking</label>
         <Toggle
           className={"eyetracking-toggle"}

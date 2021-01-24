@@ -43,10 +43,6 @@
     border: 1px solid transparent;
 }
 
-.clip-button {
-    float: right;
-}
-
 
 /*Hack the keyboard lib because I need these to be bigger */
 
@@ -60,9 +56,24 @@
     margin-right: 10px !important;
 }
 
-.simple-keyboard.hg-layout-default .hg-button.hg-gaze {
-    background-color: default;
+.simple-keyboard.hg-layout-default .hg-button.hg-gaze0 {
+    animation: fadeOut .05s;
+}
+
+.simple-keyboard.hg-layout-default .hg-button.hg-gaze250 {
+    animation: fadeOut .25s;
+}
+
+.simple-keyboard.hg-layout-default .hg-button.hg-gaze500 {
+    animation: fadeOut .50s;
+}
+
+.simple-keyboard.hg-layout-default .hg-button.hg-gaze750 {
     animation: fadeOut .75s;
+}
+
+.simple-keyboard.hg-layout-default .hg-button.hg-gaze1000 {
+    animation: fadeOut 1s;
 }
 
 @keyframes fadeOut {
