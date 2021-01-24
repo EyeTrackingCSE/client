@@ -12,7 +12,7 @@ module.exports = {
     /**
      * Index of default dwell time.
      */
-    DEFAULT_DWELL_TIME_INDEX: 3,
+    DEFAULT_DWELL_TIME_MS: 750,
 
     /**
      * DEPRECATED - not used ATM
