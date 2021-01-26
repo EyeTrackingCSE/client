@@ -6,12 +6,29 @@
 
 This app provides a virtual keyboard that enables the user to type using a connected eyetracking device.
 
-### Installation
+## Installation
+
+### Installation Script
+
+This repo contains an installation script to automate dependency installation and version checks.
+
+```npm run setup-env```
+
+### Manual Installation
+
+If you wish to install the parts manually:
+
 ```npm install```
 
 ```npm install -g foreman```
 
-### Running the app
+If you have an eyetracking device, you need to rebuild the [eyetracking](https://github.com/EyeTrackingCSE/eyetracking) module (it is written in C++ addon). You also need `node-gyp` installed on your machine if you don't have it already.
+
+```npm install -g node-gyp```
+
+```npm run eyetracking-rebuild```
+
+## Running the app
 ```npm run start```
 
 ## About
