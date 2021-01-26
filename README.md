@@ -6,15 +6,18 @@
 
 This app provides a virtual keyboard that enables the user to type using a connected eyetracking device.
 
-### Installation
+## Installation
 
-## Installation Script
+### Installation Script
 
 This repo contains an installation script to automate dependency installation and version checks.
 
 ```npm run setup-env```
 
-## Manual Installation
+### Manual Installation
+
+If you wish to install the parts manually:
+
 ```npm install```
 
 ```npm install -g foreman```
@@ -25,7 +28,7 @@ If you have an eyetracking device, you need to rebuild the [eyetracking](https:/
 
 ```npm run eyetracking-rebuild```
 
-### Running the app
+## Running the app
 ```npm run start```
 
 ## About
