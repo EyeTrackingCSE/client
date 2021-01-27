@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "../styles/WordSuggestions.css";
-import {defaults} from "../constants/index";
+import { defaults } from "../constants/index";
 
 const TIMEOUT_FETCH = 1000; // After this much time, fail fetching and return empty
 const EMPTY_OBJ = {};
@@ -11,15 +11,17 @@ const SEPARATORS = /[\W_]+/
 const Block = (props) => {
     return (
         <div
-            className={"block"}>
-            {props.word || ''}
+            className={"block"}
+            onClick={() => props.onBlockClick(props.word)}>
+            <span>
+                {props.word || ''}
+            </span>
         </div>
     )
 }
 
 const WordSuggestions = (props) => {
     let [suggestions, setSuggestions] = useState(defaults.DEFAULT_WORD_SUGGESTIONS);
-
     /**
      * Extract the last word in a string.
      * gamblers ruin => ruin
@@ -27,7 +29,20 @@ const WordSuggestions = (props) => {
      */
     const getLastWordFromInput = input => {
         const words = input.split(SEPARATORS);
-        const last = (words.length === 0) ? "" : words.pop();
+        console.log(words);
+
+        let last;
+        
+        if (words.length === 0) {
+            last = '';
+        }
+        else {
+            let lastTerm = words.pop();
+            if (lastTerm == '')
+                lastTerm = words.pop();
+            last = lastTerm;
+        }
+        console.log('last', last);
         return last;
     };
 
@@ -35,16 +50,15 @@ const WordSuggestions = (props) => {
      * Returns and array of word suggestions
      * @param {string} input string to query words suggestions for.
      */
-    const getWordSuggestions = async (input) => {
+    const getWordSuggestions = async (query) => {
         const controller = new AbortController();
         const signal = controller.signal;
 
         let timeout = setTimeout(() => controller.abort(), TIMEOUT_FETCH, EMPTY_OBJ);
-        let context = getLastWordFromInput(input);
 
         let array = [];
         try {
-            let resp = await fetch(API + context, { signal });
+            let resp = await fetch(API + query, { signal });
             array = await resp.json();
             clearTimeout(timeout);
         } catch (e) {
@@ -53,12 +67,14 @@ const WordSuggestions = (props) => {
         return array;
     };
 
-    const renderBlocks = (wordsArray) => {
+    const renderBlocks = (wordsArray, term) => {
         let ans = [];
         for (let i = 0; i < 3; i++) {
-            let word = wordsArray[i] ? wordsArray[i].word : '';
+            let word = wordsArray[i].word;
 
-            ans.push(<Block key={i} word={word} />)
+            ans.push(
+                <Block onBlockClick={props.onSuggestionClick} key={i} word={word} />
+            );
         }
         return ans;
     };
@@ -68,12 +84,14 @@ const WordSuggestions = (props) => {
      */
     useEffect(() => {
         const asyncFetchWrapper = async () => {
-            let words = await getWordSuggestions(props.input);
-            console.log(words);
+            let query = getLastWordFromInput(props.input);
+            let words = await getWordSuggestions(query);
             setSuggestions(words);
+            console.log(words);
         }
         if (props.input === '')
             return;
+
         asyncFetchWrapper();
     }, [props.input]);
 
