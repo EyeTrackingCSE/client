@@ -1,6 +1,28 @@
 .block {
     height: 90px;
     font-size: 25px;
-    background-color: #ffffff;
-    width: 100%;
+    background-color: #fff;
+    margin-right: 10px;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 0 3px -1px rgba(0, 0, 0, .3);
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 5px;
+    background: #fff;
+    border-bottom: 1px solid #b5b5b5;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color:
+}
+
+.block-wrapper {
+    background-color: #ececec;
+    display: flex;
+    padding: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }

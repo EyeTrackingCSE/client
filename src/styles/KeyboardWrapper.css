@@ -46,6 +46,11 @@
 
 /*Hack the keyboard lib because I need these to be bigger */
 
+.hg-theme-default {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+
 .hg-row {
     margin-bottom: 10px !important;
 }

@@ -17,7 +17,7 @@ const Clip = (props) => {
     }
 
     return (
-        <a onClick={onClipButtonClick} className={"clip"}>
+        <a href={'#'} onClick={onClipButtonClick} className={"clip"}>
             Clip
         </a>
     );
