@@ -1,10 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, createRef } from 'react';
 
 import Keyboard from 'react-simple-keyboard';
 import Toggle from 'react-toggle';
 import Clip from './Clip';
 import SliderWrapper from './SliderWrapper';
 import WordSuggestions from './WordSuggestions';
+
+import TobiiRegion from '../util/TobiiRegion';
 
 import 'react-simple-keyboard/build/css/index.css';
 import 'react-toggle/style.css';
@@ -27,6 +29,7 @@ const KeyboardWrapper = () => {
   const [gazeLog, setGazeLog] = useState({});
 
   const keyboard = useRef();
+  const suggestions = useRef();
 
   /**
    * Gets screen and keyboard metadata, and pushes said info to
@@ -42,17 +45,17 @@ const KeyboardWrapper = () => {
 
     let rectangles = [];
 
+    // Add keyboard interaction regions
     keyboard.current.recurseButtons(buttonElement => {
-      let block = buttonElement.getBoundingClientRect();
+      rectangles.push(new TobiiRegion(rectangles.length, buttonElement))
+    });
 
-      rectangles.push({
-        id: rectangles.length,
-        key: buttonElement.innerText,
-        x: block.x,
-        y: block.y,
-        width: block.width,
-        height: block.height
-      });
+    // Add Word suggestion regions
+    suggestions.current.recurseButtons((buttonElement, id) => {
+      let region = new TobiiRegion(rectangles.length, buttonElement);
+      region.setKey(id);
+
+      rectangles.push(region);
     });
 
     let dimensions = {
@@ -60,6 +63,8 @@ const KeyboardWrapper = () => {
       height: window.innerHeight,
       rectangles: rectangles
     };
+
+    console.log(dimensions);
 
     // Start Tobii listen loop
     ipcRenderer.send(events.ASYNC_LISTEN, dimensions);
@@ -74,9 +79,22 @@ const KeyboardWrapper = () => {
    * @param {boolean} hasFocus true if the users gaze is focused on keyPressed
    */
   const updateKeyboardStyles = (key, hasFocus) => {
-    let cssSelector = specialkeys[key] ? specialkeys[key].id : key;
     let cssClass = `hg-gaze${dwellTimeMS}`
 
+    // If the key is a WordSuggestions key.
+    if (key.includes('block')) {
+      let block = suggestions.current.getBlockById(key);
+
+      if (hasFocus) {
+        block.classList.add(cssClass);
+      } else {
+        block.classList.remove(cssClass);
+      }
+      return;
+    }
+
+    // If the key is a simple-keyboard key.
+    let cssSelector = specialkeys[key] ? specialkeys[key].id : key;
     if (hasFocus) {
       keyboard.current.addButtonTheme(cssSelector, cssClass);
     } else {
@@ -104,8 +122,28 @@ const KeyboardWrapper = () => {
     return Math.abs(timestamp - timestampOfLastFocus);
   }
 
+  const computeInputFromGaze = args => {
+    let newInput = keyboard.current.getInput();
+
+    if (specialkeys[args.key]) {
+      newInput = specialkeys[args.key].fn(newInput);
+    } 
+    else if (args.key.includes('block')) {
+      let suggestedWord = suggestions.current.getBlockById(args.key).innerText;
+      newInput = computeInputWithSuggestion(suggestedWord);
+    }
+    else {
+      newInput = newInput + args.key;
+    }
+
+    return newInput;
+  };
+
   /**
    * Called when the user looks at a key.
+   * 
+   * 
+   * TODO: Make this function neater.
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
@@ -116,16 +154,32 @@ const KeyboardWrapper = () => {
     let keyAcceptedAsInput = dwellTimeOfKey >= dwellTimeMS;
 
     if (keyAcceptedAsInput) {
-      let newInput = keyboard.current.getInput();
-
-      if (specialkeys[args.key])
-        newInput = specialkeys[args.key].fn(newInput);
-      else
-        newInput = newInput + args.key;
+      let newInput = computeInputFromGaze(args);
 
       setInput(newInput);
       keyboard.current.setInput(newInput);
     }
+  }
+
+  /* Extract the last 'word' in currentInput
+     Replace the instance of lastWord in suggestion with '' to get the remainder
+     
+     ex:
+     currentInput = album by radio
+     lastWord = radio
+     suggestion = radiohead
+     
+     trim = head
+     newInput = currentInput + trim = radio + head .   
+  */
+  const computeInputWithSuggestion = suggestion => {
+    let currentInput = keyboard.current.getInput();
+
+    let lastWord = currentInput.substring(currentInput.lastIndexOf(" ") + 1);
+    let trim = suggestion.replace(lastWord, '');
+
+    return `${currentInput}${trim} `;
+
   }
 
   /**
@@ -191,23 +245,7 @@ const KeyboardWrapper = () => {
    * @param {string} clickedWord 
    */
   const onWordSuggestionClick = (clickedWord) => {
-    let currentInput = keyboard.current.getInput();
-    
-    /* Extract the last 'word' in currentInput
-       Replace the instance of lastWord in clickedWord with '' to get the remainder
-
-       ex:
-       currentInput = album by radio
-       lastWord = radio
-       clickedWord = radiohead
-      
-       trim = head
-       newInput = currentInput + trim = radio + head .   
-    */
-    let lastWord = currentInput.substring(currentInput.lastIndexOf(" ")+1);
-    let trim = clickedWord.replace(lastWord, '');
-
-    let newInput = `${currentInput}${trim} `; 
+    let newInput = computeInputWithSuggestion(clickedWord);
 
     setInput(newInput);
     keyboard.current.setInput(newInput);
@@ -273,7 +311,9 @@ const KeyboardWrapper = () => {
       </div>
       <WordSuggestions
         input={input}
-        onSuggestionClick={onWordSuggestionClick} />
+        onSuggestionClick={onWordSuggestionClick}
+        ref={suggestions}
+      />
       <Keyboard
         className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}

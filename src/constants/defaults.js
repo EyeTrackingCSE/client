@@ -32,7 +32,7 @@ module.exports = {
 
     DEFAULT_WORD_SUGGESTIONS: [
         { word: 'the', score: 0 },
-        { word: 'i', score: 0 },
+        { word: 'you', score: 0 },
         { word: 'for', score: 0 },
     ]
 }
