@@ -60,18 +60,17 @@ const KeyboardWrapper = () => {
     });
 
     // Add Word suggestion regions
-    suggestions.current.recurseButtons(buttonElement => {
+    suggestions.current.recurseButtons((buttonElement, id) => {
       let block = buttonElement.getBoundingClientRect();
       rectangles.push({
         id: rectangles.length,
-        key: buttonElement.innerText,
+        key: id,
         x: block.x,
         y: block.y,
         width: block.width,
         height: block.height
       });
     });
-
 
     let dimensions = {
       width: window.innerWidth,
@@ -80,6 +79,7 @@ const KeyboardWrapper = () => {
     };
 
     console.log(dimensions);
+    
     // Start Tobii listen loop
     ipcRenderer.send(events.ASYNC_LISTEN, dimensions);
   }

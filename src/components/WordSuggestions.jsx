@@ -28,6 +28,12 @@ const WordSuggestions = forwardRef((props, ref) => {
     const blockMiddle = useRef();
     const blockRight = useRef();
 
+    const blockObject = {
+        blockLeft,
+        blockMiddle,
+        blockRight
+    }
+
     /**
      * Extract the last word in a string.
      * gamblers ruin => ruin
@@ -72,6 +78,10 @@ const WordSuggestions = forwardRef((props, ref) => {
             callback(blockLeft.current);
             callback(blockMiddle.current);
             callback(blockRight.current);
+        },
+
+        getTextById(id) {
+            return blockObject[id].current.innerText;
         }
     }));
 
