@@ -9,48 +9,30 @@ const SEPARATORS = /[\W_]+/
 const api = "https://api.datamuse.com/sug?s="
 
 const WordSuggestions = (props) => {
-
-    if (!props.input || props.input.length === 0) {
-        throw new Error("input cannot be undefined/null.");
-    }
-
     const getLastWordFromInput = input => {
         const words = input.split(SEPARATORS);
         const last = (words.length === 0) ? "" : words.pop();
         return last;
     };
 
-    const getWordSuggestions = (input) => {
+    const getWordSuggestions = async (input) => {
         const controller = new AbortController();
         const signal = controller.signal;
-        setTimeout(() => controller.abort(), timeout, EMPTY_OBJ);
+        setTimeout(() => controller.abort(), TIMEOUT_FETCH, EMPTY_OBJ);
 
         let cue = getLastWordFromInput(input);
 
-        let results;
-        try {
-            results = await fetch(api + cue, {signal});
-        } catch {   
-            console.error("Error in fetch");
-        }
-
-        console.log(results);
-
-        return results;
+        return fetch(api + cue, { signal })
+            .then(result => {
+                result = result.json();
+                console.log(result);
+            })
+            .catch(error => error);
     };
 
     return (
-        <div onClick={getWordSuggestions(props.input)}>
-            dsfajjf;lkdsa;lkdsa
-        </div>
+        <div></div>
     );
 };
 
 export default WordSuggestions;
-
-
-// HTML
-
-<WordSuggestions
-    input={input}
-></WordSuggestions>

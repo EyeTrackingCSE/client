@@ -4,6 +4,7 @@ import Keyboard from 'react-simple-keyboard';
 import Toggle from 'react-toggle';
 import Clip from './Clip';
 import SliderWrapper from './SliderWrapper';
+import WordSuggestions from './WordSuggestions';
 
 import 'react-simple-keyboard/build/css/index.css';
 import 'react-toggle/style.css';
