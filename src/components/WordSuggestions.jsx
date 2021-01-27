@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const TIMEOUT_FETCH = 1000; // After this much time, fail fetching and return empty
 const EMPTY_OBJ = {};
@@ -9,6 +9,8 @@ const SEPARATORS = /[\W_]+/
 const api = "https://api.datamuse.com/sug?s="
 
 const WordSuggestions = (props) => {
+    let [suggestions, setSuggestions] = useState([]);
+
     const getLastWordFromInput = input => {
         const words = input.split(SEPARATORS);
         const last = (words.length === 0) ? "" : words.pop();
@@ -25,11 +27,18 @@ const WordSuggestions = (props) => {
 
         let resp = await fetch(api + cue, { signal });
         let array = await resp.json();
+
         return array || [];
     };
 
+    useEffect(async () => {
+        let words = await getWordSuggestions(props.input);
+        console.log(words);
+        setSuggestions(words);
+    }, [props.input]);
+
     return (
-        <a onClick={() => getWordSuggestions(props.input)} ></a>
+        <div></div>
     );
 };
 
