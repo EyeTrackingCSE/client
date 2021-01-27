@@ -1,44 +1,94 @@
 import React, { useState, useEffect } from 'react';
+import "../styles/WordSuggestions.css";
+import { defaults } from "../constants/index";
 
 const TIMEOUT_FETCH = 1000; // After this much time, fail fetching and return empty
 const EMPTY_OBJ = {};
+const API = "https://api.datamuse.com/sug?s="
 
 const SEPARATORS = /[\W_]+/
 
-// Word suggestion API from https://www.datamuse.com/api/
-const api = "https://api.datamuse.com/sug?s="
+const Block = (props) => {
+    return (
+        <div
+            className={"block"}
+            onClick={() => props.onBlockClick(props.word)}>
+            <span>
+                {props.word || ''}
+            </span>
+        </div>
+    )
+}
 
 const WordSuggestions = (props) => {
-    let [suggestions, setSuggestions] = useState([]);
-
+    let [suggestions, setSuggestions] = useState(defaults.DEFAULT_WORD_SUGGESTIONS);
+    /**
+     * Extract the last word in a string.
+     * gamblers ruin => ruin
+     * @param {string} input 
+     */
     const getLastWordFromInput = input => {
         const words = input.split(SEPARATORS);
-        const last = (words.length === 0) ? "" : words.pop();
+
+        let last = (words.length === 0) ? '' : words.pop();
         return last;
     };
 
-    const getWordSuggestions = async (input) => {
+    /**
+     * Returns and array of word suggestions
+     * @param {string} input string to query words suggestions for.
+     */
+    const getWordSuggestions = async (query) => {
+        if (query === '')
+            return defaults.DEFAULT_WORD_SUGGESTIONS;
+
         const controller = new AbortController();
         const signal = controller.signal;
 
-        setTimeout(() => controller.abort(), TIMEOUT_FETCH, EMPTY_OBJ);
+        let timeout = setTimeout(() => controller.abort(), TIMEOUT_FETCH, EMPTY_OBJ);
 
-        let cue = getLastWordFromInput(input);
-
-        let resp = await fetch(api + cue, { signal });
-        let array = await resp.json();
-
-        return array || [];
+        let array = [];
+        try {
+            let resp = await fetch(API + query, { signal });
+            array = await resp.json();
+            clearTimeout(timeout);
+        } catch (e) {
+            console.error(e);
+        }
+        return array;
     };
 
-    useEffect(async () => {
-        let words = await getWordSuggestions(props.input);
-        console.log(words);
-        setSuggestions(words);
+    const renderBlocks = (wordsArray) => {
+        let ans = [];
+        for (let i = 0; i < 3; i++) {
+            let word = (wordsArray[i]) ? wordsArray[i].word : ' ';
+
+            ans.push(
+                <Block onBlockClick={props.onSuggestionClick} key={i} word={word} />
+            );
+        }
+        return ans;
+    };
+
+    /**
+     * Function runs when props.input changes, because we need to query the API again.
+     */
+    useEffect(() => {
+        const asyncFetchWrapper = async () => {
+            let query = getLastWordFromInput(props.input);
+            let words = await getWordSuggestions(query);
+            setSuggestions(words);
+        }
+        if (props.input === '')
+            return;
+
+        asyncFetchWrapper();
     }, [props.input]);
 
     return (
-        <div></div>
+        <div className={"block-wrapper"}>
+            {renderBlocks(suggestions)}
+        </div>
     );
 };
 

@@ -35,6 +35,7 @@
         "dist": "npm run build && build",
         "postinstall": "install-app-deps",
         "rebuild-eyetracking": "cd ./node_modules/eyetracking/cpp && set HOME=~/.electron-gyp && node-gyp rebuild --target=10.1.4 --arch=x64 --dist-url=https://electronjs.org/headers",
+        "build-electron": "mkdir ./build/electron && robocopy electron build/electron /S",
         "setup-env": "node ./scripts/setup-env.js"
     },
     "eslintConfig": {

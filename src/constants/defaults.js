@@ -28,5 +28,11 @@ module.exports = {
     /**
      * By default whether to listen for gaze data.
      */
-    DEFAULT_EYETRACKING_ON: false
+    DEFAULT_EYETRACKING_ON: false,
+
+    DEFAULT_WORD_SUGGESTIONS: [
+        { word: 'the', score: 0 },
+        { word: 'i', score: 0 },
+        { word: 'for', score: 0 },
+    ]
 }

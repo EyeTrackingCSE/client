@@ -187,6 +187,33 @@ const KeyboardWrapper = () => {
   }
 
   /**
+   * When user clicks word suggestions, update input variables.
+   * @param {string} clickedWord 
+   */
+  const onWordSuggestionClick = (clickedWord) => {
+    let currentInput = keyboard.current.getInput();
+    
+    /* Extract the last 'word' in currentInput
+       Replace the instance of lastWord in clickedWord with '' to get the remainder
+
+       ex:
+       currentInput = album by radio
+       lastWord = radio
+       clickedWord = radiohead
+      
+       trim = head
+       newInput = currentInput + trim = radio + head .   
+    */
+    let lastWord = currentInput.substring(currentInput.lastIndexOf(" ")+1);
+    let trim = clickedWord.replace(lastWord, '');
+
+    let newInput = `${currentInput}${trim} `; 
+
+    setInput(newInput);
+    keyboard.current.setInput(newInput);
+  }
+
+  /**
    * Gets called when component mounts
    * 
    * When the use changes the window size,
@@ -244,6 +271,9 @@ const KeyboardWrapper = () => {
           onChange={onChangeInput}
         />
       </div>
+      <WordSuggestions
+        input={input}
+        onSuggestionClick={onWordSuggestionClick} />
       <Keyboard
         className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}
