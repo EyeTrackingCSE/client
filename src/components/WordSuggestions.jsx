@@ -75,13 +75,13 @@ const WordSuggestions = forwardRef((props, ref) => {
      */
     useImperativeHandle(ref, () => ({
         recurseButtons(callback) {
-            callback(blockLeft.current);
-            callback(blockMiddle.current);
-            callback(blockRight.current);
+            callback(blockLeft.current, 'blockLeft');
+            callback(blockMiddle.current, 'blockMiddle');
+            callback(blockRight.current, 'blockRight');
         },
 
-        getTextById(id) {
-            return blockObject[id].current.innerText;
+        getBlockById(id) {
+            return blockObject[id].current;
         }
     }));
 

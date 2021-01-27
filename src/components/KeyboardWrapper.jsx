@@ -54,6 +54,7 @@ const KeyboardWrapper = () => {
     suggestions.current.recurseButtons((buttonElement, id) => {
       let region = new TobiiRegion(rectangles.length, buttonElement);
       region.setKey(id);
+
       rectangles.push(region);
     });
 
@@ -110,6 +111,9 @@ const KeyboardWrapper = () => {
 
   /**
    * Called when the user looks at a key.
+   * 
+   * 
+   * TODO: Make this function neater.
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
@@ -123,14 +127,43 @@ const KeyboardWrapper = () => {
     if (keyAcceptedAsInput) {
       let newInput = keyboard.current.getInput();
 
-      if (specialkeys[args.key])
+
+      if (specialkeys[args.key]) {
         newInput = specialkeys[args.key].fn(newInput);
-      else
+      } 
+      else if (args.key.includes('block')) {
+        let suggestedWord = suggestions.current.getBlockById(args.key).innerText;
+        console.log(suggestedWord);
+        newInput = computeInputWithSuggestion(suggestedWord);
+      }
+      else {
         newInput = newInput + args.key;
+      }
 
       setInput(newInput);
       keyboard.current.setInput(newInput);
     }
+  }
+
+  /* Extract the last 'word' in currentInput
+     Replace the instance of lastWord in suggestion with '' to get the remainder
+     
+     ex:
+     currentInput = album by radio
+     lastWord = radio
+     suggestion = radiohead
+     
+     trim = head
+     newInput = currentInput + trim = radio + head .   
+  */
+  const computeInputWithSuggestion = suggestion => {
+    let currentInput = keyboard.current.getInput();
+
+    let lastWord = currentInput.substring(currentInput.lastIndexOf(" ") + 1);
+    let trim = suggestion.replace(lastWord, '');
+
+    return `${currentInput}${trim} `;
+
   }
 
   /**
@@ -196,23 +229,7 @@ const KeyboardWrapper = () => {
    * @param {string} clickedWord 
    */
   const onWordSuggestionClick = (clickedWord) => {
-    let currentInput = keyboard.current.getInput();
-
-    /* Extract the last 'word' in currentInput
-       Replace the instance of lastWord in clickedWord with '' to get the remainder
-
-       ex:
-       currentInput = album by radio
-       lastWord = radio
-       clickedWord = radiohead
-      
-       trim = head
-       newInput = currentInput + trim = radio + head .   
-    */
-    let lastWord = currentInput.substring(currentInput.lastIndexOf(" ") + 1);
-    let trim = clickedWord.replace(lastWord, '');
-
-    let newInput = `${currentInput}${trim} `;
+    let newInput = computeInputWithSuggestion(clickedWord);
 
     setInput(newInput);
     keyboard.current.setInput(newInput);
