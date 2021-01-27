@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useImperativeHandle, createRef, forwardRef, useRef } from 'react';
 import "../styles/WordSuggestions.css";
 import { defaults } from "../constants/index";
 
@@ -8,25 +8,25 @@ const API = "https://api.datamuse.com/sug?s="
 
 const SEPARATORS = /[\W_]+/
 
-const Block = (props) => {
+const Block = forwardRef((props, ref) => {
     return (
         <div
             className={"block"}
-            onClick={() => props.onBlockClick(props.word)}>
+            onClick={() => props.onBlockClick(props.word)}
+            ref={ref}>
             <span>
                 {props.word || ''}
             </span>
         </div>
     )
-}
+});
 
-const WordSuggestions = (props) => {
+const WordSuggestions = forwardRef((props, ref) => {
     let [suggestions, setSuggestions] = useState(defaults.DEFAULT_WORD_SUGGESTIONS);
 
     const blockLeft = useRef();
     const blockMiddle = useRef();
     const blockRight = useRef();
-
 
     /**
      * Extract the last word in a string.
@@ -65,27 +65,15 @@ const WordSuggestions = (props) => {
     };
 
     /**
-     * Returns HTML element objects for Blocks.
+     * Expose the recurseButtons hook to parent.
      */
-    const recurseButtons = () => {
-
-    }
-
-    /**
-     * Deprecated.
-     * @param {array} wordsArray 
-     */
-    const renderBlocks = (wordsArray) => {
-        let ans = [];
-        for (let i = 0; i < 3; i++) {
-            let word = (wordsArray[i]) ? wordsArray[i].word : ' ';
-
-            ans.push(
-                <Block onBlockClick={props.onSuggestionClick} key={i} word={word} />
-            );
+    useImperativeHandle(ref, () => ({
+        recurseButtons(callback) {
+            callback(blockLeft.current);
+            callback(blockMiddle.current);
+            callback(blockRight.current);
         }
-        return ans;
-    };
+    }));
 
     const getWordAtIndex = (wordsArray, i) => {
         return (wordsArray[i]) ? wordsArray[i].word : ' ';
@@ -106,7 +94,7 @@ const WordSuggestions = (props) => {
     }, [props.input]);
 
     return (
-        <div className={"block-wrapper"}>
+        <div className={"block-wrapper"} ref={ref}>
             <Block
                 onBlockClick={props.onSuggestionClick}
                 ref={blockLeft}
@@ -121,6 +109,6 @@ const WordSuggestions = (props) => {
                 word={getWordAtIndex(suggestions, 2)} />
         </div>
     );
-};
+});
 
 export default WordSuggestions;

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, createRef } from 'react';
 
 import Keyboard from 'react-simple-keyboard';
 import Toggle from 'react-toggle';
@@ -43,6 +43,8 @@ const KeyboardWrapper = () => {
 
     let rectangles = [];
 
+    // TODO: Make this neater.
+
     // Add keyboard interaction regions
     keyboard.current.recurseButtons(buttonElement => {
       let block = buttonElement.getBoundingClientRect();
@@ -58,6 +60,18 @@ const KeyboardWrapper = () => {
     });
 
     // Add Word suggestion regions
+    suggestions.current.recurseButtons(buttonElement => {
+      let block = buttonElement.getBoundingClientRect();
+      rectangles.push({
+        id: rectangles.length,
+        key: buttonElement.innerText,
+        x: block.x,
+        y: block.y,
+        width: block.width,
+        height: block.height
+      });
+    });
+
 
     let dimensions = {
       width: window.innerWidth,
@@ -65,6 +79,7 @@ const KeyboardWrapper = () => {
       rectangles: rectangles
     };
 
+    console.log(dimensions);
     // Start Tobii listen loop
     ipcRenderer.send(events.ASYNC_LISTEN, dimensions);
   }
@@ -114,6 +129,7 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
+    console.log(args.key);
     updateKeyboardStyles(args.key, args.hasFocus);
 
     let dwellTimeOfKey = computeDwellTime(args.key, args.timestamp);
@@ -278,7 +294,8 @@ const KeyboardWrapper = () => {
       <WordSuggestions
         input={input}
         onSuggestionClick={onWordSuggestionClick}
-        ref={suggestions} />
+        ref={suggestions}
+         />
       <Keyboard
         className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}
