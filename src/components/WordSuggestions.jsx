@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import "../styles/WordSuggestions.css";
 import { defaults } from "../constants/index";
 
@@ -22,6 +22,12 @@ const Block = (props) => {
 
 const WordSuggestions = (props) => {
     let [suggestions, setSuggestions] = useState(defaults.DEFAULT_WORD_SUGGESTIONS);
+
+    const blockLeft = useRef();
+    const blockMiddle = useRef();
+    const blockRight = useRef();
+
+
     /**
      * Extract the last word in a string.
      * gamblers ruin => ruin
@@ -58,6 +64,17 @@ const WordSuggestions = (props) => {
         return array;
     };
 
+    /**
+     * Returns HTML element objects for Blocks.
+     */
+    const recurseButtons = () => {
+
+    }
+
+    /**
+     * Deprecated.
+     * @param {array} wordsArray 
+     */
     const renderBlocks = (wordsArray) => {
         let ans = [];
         for (let i = 0; i < 3; i++) {
@@ -70,6 +87,9 @@ const WordSuggestions = (props) => {
         return ans;
     };
 
+    const getWordAtIndex = (wordsArray, i) => {
+        return (wordsArray[i]) ? wordsArray[i].word : ' ';
+    }
     /**
      * Function runs when props.input changes, because we need to query the API again.
      */
@@ -87,7 +107,18 @@ const WordSuggestions = (props) => {
 
     return (
         <div className={"block-wrapper"}>
-            {renderBlocks(suggestions)}
+            <Block
+                onBlockClick={props.onSuggestionClick}
+                ref={blockLeft}
+                word={getWordAtIndex(suggestions, 0)} />
+            <Block
+                onBlockClick={props.onSuggestionClick}
+                ref={blockMiddle}
+                word={getWordAtIndex(suggestions, 1)} />
+            <Block
+                onBlockClick={props.onSuggestionClick}
+                ref={blockRight}
+                word={getWordAtIndex(suggestions, 2)} />
         </div>
     );
 };

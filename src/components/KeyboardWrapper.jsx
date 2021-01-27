@@ -27,6 +27,7 @@ const KeyboardWrapper = () => {
   const [gazeLog, setGazeLog] = useState({});
 
   const keyboard = useRef();
+  const suggestions = useRef();
 
   /**
    * Gets screen and keyboard metadata, and pushes said info to
@@ -42,6 +43,7 @@ const KeyboardWrapper = () => {
 
     let rectangles = [];
 
+    // Add keyboard interaction regions
     keyboard.current.recurseButtons(buttonElement => {
       let block = buttonElement.getBoundingClientRect();
 
@@ -54,6 +56,8 @@ const KeyboardWrapper = () => {
         height: block.height
       });
     });
+
+    // Add Word suggestion regions
 
     let dimensions = {
       width: window.innerWidth,
@@ -273,7 +277,8 @@ const KeyboardWrapper = () => {
       </div>
       <WordSuggestions
         input={input}
-        onSuggestionClick={onWordSuggestionClick} />
+        onSuggestionClick={onWordSuggestionClick}
+        ref={suggestions} />
       <Keyboard
         className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}
