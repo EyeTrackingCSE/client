@@ -6,6 +6,8 @@ import Clip from './Clip';
 import SliderWrapper from './SliderWrapper';
 import WordSuggestions from './WordSuggestions';
 
+import TobiiRegion from '../util/TobiiRegion';
+
 import 'react-simple-keyboard/build/css/index.css';
 import 'react-toggle/style.css';
 
@@ -43,33 +45,16 @@ const KeyboardWrapper = () => {
 
     let rectangles = [];
 
-    // TODO: Make this neater.
-
     // Add keyboard interaction regions
     keyboard.current.recurseButtons(buttonElement => {
-      let block = buttonElement.getBoundingClientRect();
-
-      rectangles.push({
-        id: rectangles.length,
-        key: buttonElement.innerText,
-        x: block.x,
-        y: block.y,
-        width: block.width,
-        height: block.height
-      });
+      rectangles.push(new TobiiRegion(rectangles.length, buttonElement))
     });
 
     // Add Word suggestion regions
     suggestions.current.recurseButtons((buttonElement, id) => {
-      let block = buttonElement.getBoundingClientRect();
-      rectangles.push({
-        id: rectangles.length,
-        key: id,
-        x: block.x,
-        y: block.y,
-        width: block.width,
-        height: block.height
-      });
+      let region = new TobiiRegion(rectangles.length, buttonElement);
+      region.setKey(id);
+      rectangles.push(region);
     });
 
     let dimensions = {
@@ -79,7 +64,7 @@ const KeyboardWrapper = () => {
     };
 
     console.log(dimensions);
-    
+
     // Start Tobii listen loop
     ipcRenderer.send(events.ASYNC_LISTEN, dimensions);
   }
@@ -212,7 +197,7 @@ const KeyboardWrapper = () => {
    */
   const onWordSuggestionClick = (clickedWord) => {
     let currentInput = keyboard.current.getInput();
-    
+
     /* Extract the last 'word' in currentInput
        Replace the instance of lastWord in clickedWord with '' to get the remainder
 
@@ -224,10 +209,10 @@ const KeyboardWrapper = () => {
        trim = head
        newInput = currentInput + trim = radio + head .   
     */
-    let lastWord = currentInput.substring(currentInput.lastIndexOf(" ")+1);
+    let lastWord = currentInput.substring(currentInput.lastIndexOf(" ") + 1);
     let trim = clickedWord.replace(lastWord, '');
 
-    let newInput = `${currentInput}${trim} `; 
+    let newInput = `${currentInput}${trim} `;
 
     setInput(newInput);
     keyboard.current.setInput(newInput);
@@ -295,7 +280,7 @@ const KeyboardWrapper = () => {
         input={input}
         onSuggestionClick={onWordSuggestionClick}
         ref={suggestions}
-         />
+      />
       <Keyboard
         className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}
