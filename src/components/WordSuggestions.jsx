@@ -29,20 +29,8 @@ const WordSuggestions = (props) => {
      */
     const getLastWordFromInput = input => {
         const words = input.split(SEPARATORS);
-        console.log(words);
 
-        let last;
-        
-        if (words.length === 0) {
-            last = '';
-        }
-        else {
-            let lastTerm = words.pop();
-            if (lastTerm == '')
-                lastTerm = words.pop();
-            last = lastTerm;
-        }
-        console.log('last', last);
+        let last = (words.length === 0) ? '' : words.pop();
         return last;
     };
 
@@ -51,6 +39,9 @@ const WordSuggestions = (props) => {
      * @param {string} input string to query words suggestions for.
      */
     const getWordSuggestions = async (query) => {
+        if (query === '')
+            return defaults.DEFAULT_WORD_SUGGESTIONS;
+
         const controller = new AbortController();
         const signal = controller.signal;
 
@@ -67,10 +58,10 @@ const WordSuggestions = (props) => {
         return array;
     };
 
-    const renderBlocks = (wordsArray, term) => {
+    const renderBlocks = (wordsArray) => {
         let ans = [];
         for (let i = 0; i < 3; i++) {
-            let word = wordsArray[i].word;
+            let word = (wordsArray[i]) ? wordsArray[i].word : ' ';
 
             ans.push(
                 <Block onBlockClick={props.onSuggestionClick} key={i} word={word} />
@@ -87,7 +78,6 @@ const WordSuggestions = (props) => {
             let query = getLastWordFromInput(props.input);
             let words = await getWordSuggestions(query);
             setSuggestions(words);
-            console.log(words);
         }
         if (props.input === '')
             return;

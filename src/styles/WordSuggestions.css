@@ -18,6 +18,11 @@
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.block:active {
+    background-color: rgb(218, 220, 228);
+    color: #000000;
+}
+
 .block-wrapper {
     background-color: #ececec;
     display: flex;
