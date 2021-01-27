@@ -18,20 +18,18 @@ const WordSuggestions = (props) => {
     const getWordSuggestions = async (input) => {
         const controller = new AbortController();
         const signal = controller.signal;
+
         setTimeout(() => controller.abort(), TIMEOUT_FETCH, EMPTY_OBJ);
 
         let cue = getLastWordFromInput(input);
 
-        return fetch(api + cue, { signal })
-            .then(result => {
-                result = result.json();
-                console.log(result);
-            })
-            .catch(error => error);
+        let resp = await fetch(api + cue, { signal });
+        let array = await resp.json();
+        return array || [];
     };
 
     return (
-        <div></div>
+        <a onClick={() => getWordSuggestions(props.input)} ></a>
     );
 };
 
