@@ -79,9 +79,22 @@ const KeyboardWrapper = () => {
    * @param {boolean} hasFocus true if the users gaze is focused on keyPressed
    */
   const updateKeyboardStyles = (key, hasFocus) => {
-    let cssSelector = specialkeys[key] ? specialkeys[key].id : key;
     let cssClass = `hg-gaze${dwellTimeMS}`
 
+    // If the key is a WordSuggestions key.
+    if (key.includes('block')) {
+      let block = suggestions.current.getBlockById(key);
+
+      if (hasFocus) {
+        block.classList.add(cssClass);
+      } else {
+        block.classList.remove(cssClass);
+      }
+      return;
+    }
+
+    // If the key is a simple-keyboard key.
+    let cssSelector = specialkeys[key] ? specialkeys[key].id : key;
     if (hasFocus) {
       keyboard.current.addButtonTheme(cssSelector, cssClass);
     } else {
@@ -109,6 +122,23 @@ const KeyboardWrapper = () => {
     return Math.abs(timestamp - timestampOfLastFocus);
   }
 
+  const computeInputFromGaze = args => {
+    let newInput = keyboard.current.getInput();
+
+    if (specialkeys[args.key]) {
+      newInput = specialkeys[args.key].fn(newInput);
+    } 
+    else if (args.key.includes('block')) {
+      let suggestedWord = suggestions.current.getBlockById(args.key).innerText;
+      newInput = computeInputWithSuggestion(suggestedWord);
+    }
+    else {
+      newInput = newInput + args.key;
+    }
+
+    return newInput;
+  };
+
   /**
    * Called when the user looks at a key.
    * 
@@ -118,27 +148,13 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
-    console.log(args.key);
     updateKeyboardStyles(args.key, args.hasFocus);
 
     let dwellTimeOfKey = computeDwellTime(args.key, args.timestamp);
     let keyAcceptedAsInput = dwellTimeOfKey >= dwellTimeMS;
 
     if (keyAcceptedAsInput) {
-      let newInput = keyboard.current.getInput();
-
-
-      if (specialkeys[args.key]) {
-        newInput = specialkeys[args.key].fn(newInput);
-      } 
-      else if (args.key.includes('block')) {
-        let suggestedWord = suggestions.current.getBlockById(args.key).innerText;
-        console.log(suggestedWord);
-        newInput = computeInputWithSuggestion(suggestedWord);
-      }
-      else {
-        newInput = newInput + args.key;
-      }
+      let newInput = computeInputFromGaze(args);
 
       setInput(newInput);
       keyboard.current.setInput(newInput);

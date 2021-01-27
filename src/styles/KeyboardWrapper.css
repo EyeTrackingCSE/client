@@ -61,23 +61,23 @@
     margin-right: 10px !important;
 }
 
-.simple-keyboard.hg-layout-default .hg-button.hg-gaze1 {
+.hg-gaze1 {
     animation: fadeOut .01s;
 }
 
-.simple-keyboard.hg-layout-default .hg-button.hg-gaze250 {
+.hg-gaze250 {
     animation: fadeOut .25s;
 }
 
-.simple-keyboard.hg-layout-default .hg-button.hg-gaze500 {
+.hg-gaze500 {
     animation: fadeOut .50s;
 }
 
-.simple-keyboard.hg-layout-default .hg-button.hg-gaze750 {
+.hg-gaze750 {
     animation: fadeOut .75s;
 }
 
-.simple-keyboard.hg-layout-default .hg-button.hg-gaze1000 {
+.hg-gaze1000 {
     animation: fadeOut 1s;
 }
 
