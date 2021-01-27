@@ -244,6 +244,7 @@ const KeyboardWrapper = () => {
           onChange={onChangeInput}
         />
       </div>
+      <WordSuggestions input={input} />
       <Keyboard
         className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}
