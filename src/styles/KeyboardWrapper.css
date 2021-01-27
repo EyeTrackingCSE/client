@@ -58,7 +58,7 @@
 .hg-theme-default .hg-button {
     height: 90px !important;
     font-size: 25px;
-    margin-right: 10px !important;
+    /* margin-right: 10px !important; */
 }
 
 .hg-gaze1 {
