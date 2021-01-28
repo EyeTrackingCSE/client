@@ -2,6 +2,9 @@ import React, { useState, useEffect, useImperativeHandle, createRef, forwardRef,
 import "../styles/WordSuggestions.css";
 import { defaults } from "../constants/index";
 
+/**
+ * Component that simply displays text.
+ */
 const Block = forwardRef((props, ref) => {
     return (
         <div
@@ -9,12 +12,15 @@ const Block = forwardRef((props, ref) => {
             onClick={() => props.onBlockClick(props.word)}
             ref={ref}>
             <span>
-                {props.word || ''}
+                {props.word || ' '}
             </span>
         </div>
     )
 });
 
+/**
+ * Component that displays words suggestions provided a query string (props.input);
+ */
 const WordSuggestions = forwardRef((props, ref) => {
     let [suggestions, setSuggestions] = useState(defaults.DEFAULT_WORD_SUGGESTIONS);
 
@@ -59,7 +65,6 @@ const WordSuggestions = forwardRef((props, ref) => {
         let http = `https://api.datamuse.com/sug?s=${query}`
 
         try {
-
             let resp = await fetch(http, { signal });
             array = await resp.json();
             clearTimeout(timeout);
@@ -74,6 +79,12 @@ const WordSuggestions = forwardRef((props, ref) => {
      * Expose the recurseButtons hook to parent.
      */
     useImperativeHandle(ref, () => ({
+
+        /**
+         * callback() gets called for each block in the component.
+         * Gives the parent access to the blocks HTMLElement object.
+         * @param {function} callback 
+         */
         recurseButtons(callback) {
             callback(blockLeft.current, 'blockLeft');
             callback(blockMiddle.current, 'blockMiddle');
