@@ -2,12 +2,9 @@ import React, { useState, useEffect, useImperativeHandle, createRef, forwardRef,
 import "../styles/WordSuggestions.css";
 import { defaults } from "../constants/index";
 
-const TIMEOUT_FETCH = 1000; // After this much time, fail fetching and return empty
-const EMPTY_OBJ = {};
-const API = "https://api.datamuse.com/sug?s="
-
-const SEPARATORS = /[\W_]+/
-
+/**
+ * Component that simply displays text.
+ */
 const Block = forwardRef((props, ref) => {
     return (
         <div
@@ -15,15 +12,19 @@ const Block = forwardRef((props, ref) => {
             onClick={() => props.onBlockClick(props.word)}
             ref={ref}>
             <span>
-                {props.word || ''}
+                {props.word || ' '}
             </span>
         </div>
     )
 });
 
+/**
+ * Component that displays words suggestions provided a query string (props.input);
+ */
 const WordSuggestions = forwardRef((props, ref) => {
     let [suggestions, setSuggestions] = useState(defaults.DEFAULT_WORD_SUGGESTIONS);
 
+    // Refs to 3 blocks that display words. This exposes the blocks to the parent.
     const blockLeft = useRef();
     const blockMiddle = useRef();
     const blockRight = useRef();
@@ -40,7 +41,7 @@ const WordSuggestions = forwardRef((props, ref) => {
      * @param {string} input 
      */
     const getLastWordFromInput = input => {
-        const words = input.split(SEPARATORS);
+        const words = input.split(/[\W_]+/);
 
         let last = (words.length === 0) ? '' : words.pop();
         return last;
@@ -56,16 +57,20 @@ const WordSuggestions = forwardRef((props, ref) => {
 
         const controller = new AbortController();
         const signal = controller.signal;
+        const timeoutDurationMS = 1000;
 
-        let timeout = setTimeout(() => controller.abort(), TIMEOUT_FETCH, EMPTY_OBJ);
+        let timeout = setTimeout(() => controller.abort(), timeoutDurationMS);
 
         let array = [];
+        let http = `https://api.datamuse.com/sug?s=${query}`
+
         try {
-            let resp = await fetch(API + query, { signal });
+            let resp = await fetch(http, { signal });
             array = await resp.json();
             clearTimeout(timeout);
         } catch (e) {
-            console.error(e);
+            console.error(`${http} request timed out after ${timeoutDurationMS} MS`)
+            array = defaults.DEFAULT_WORD_SUGGESTIONS;
         }
         return array;
     };
@@ -74,6 +79,12 @@ const WordSuggestions = forwardRef((props, ref) => {
      * Expose the recurseButtons hook to parent.
      */
     useImperativeHandle(ref, () => ({
+
+        /**
+         * callback() gets called for each block in the component.
+         * Gives the parent access to the blocks HTMLElement object.
+         * @param {function} callback 
+         */
         recurseButtons(callback) {
             callback(blockLeft.current, 'blockLeft');
             callback(blockMiddle.current, 'blockMiddle');
@@ -88,6 +99,7 @@ const WordSuggestions = forwardRef((props, ref) => {
     const getWordAtIndex = (wordsArray, i) => {
         return (wordsArray[i]) ? wordsArray[i].word : ' ';
     }
+
     /**
      * Function runs when props.input changes, because we need to query the API again.
      */

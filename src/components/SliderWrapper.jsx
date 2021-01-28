@@ -1,14 +1,12 @@
 import React from 'react';
-
 import Slider, { SliderTooltip } from 'rc-slider';
-
-import 'rc-slider/assets/index.css';
-
 import { defaults } from "../constants/index";
 
+import 'rc-slider/assets/index.css';
 import "../styles/SliderWrapper.css";
 
 const { Handle } = Slider;
+
 
 /**
  * Utility component that slider tooltip. Does not get exported
@@ -31,7 +29,7 @@ const handle = props => {
 
 /**
  * This is an interactive slider to adjust the dwelltime in KeyboardWrapper
- * @param {*} props 
+ * @param {object} props 
  */
 const SliderWrapper = (props) => {
 
