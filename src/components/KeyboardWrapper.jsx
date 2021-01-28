@@ -72,7 +72,7 @@ const KeyboardWrapper = () => {
 
   /**
    * Updates CSS of keyboard. If a key is focused on,
-   * apply the hg-gaze animation to it.
+   * apply the hg-gaze animation to it. TODO: make this neater.
    * 
    * If the key is not focused on, clear the hg-gaze animation.
    * @param {string} keyPressed key pressed on virtual keyboard
@@ -122,6 +122,11 @@ const KeyboardWrapper = () => {
     return Math.abs(timestamp - timestampOfLastFocus);
   }
 
+  /**
+   * Using what the current input is, find what the next input should be.
+   * 
+   * @param {object} args 
+   */
   const computeInputFromGaze = args => {
     let newInput = keyboard.current.getInput();
 
@@ -179,7 +184,6 @@ const KeyboardWrapper = () => {
     let trim = suggestion.replace(lastWord, '');
 
     return `${currentInput}${trim} `;
-
   }
 
   /**
@@ -283,6 +287,9 @@ const KeyboardWrapper = () => {
     } else {
       keyboard.current.recurseButtons(buttonElement =>
         updateKeyboardStyles(buttonElement.innerText, false));
+      suggestions.current.recurseButtons((buttonElement, id) => {
+        updateKeyboardStyles(id, false);
+      });
     }
   }, [eyetrackingIsOn, dwellTimeMS])
 
