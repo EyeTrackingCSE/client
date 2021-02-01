@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, createRef } from 'react';
 import Keyboard from 'react-simple-keyboard';
 import Toggle from 'react-toggle';
 import Clip from './Clip';
+import Paste from './Paste';
 import SliderWrapper from './SliderWrapper';
 import WordSuggestions from './WordSuggestions';
 
@@ -132,7 +133,7 @@ const KeyboardWrapper = () => {
 
     if (specialkeys[args.key]) {
       newInput = specialkeys[args.key].fn(newInput);
-    } 
+    }
     else if (args.key.includes('block')) {
       let suggestedWord = suggestions.current.getBlockById(args.key).innerText;
       newInput = computeInputWithSuggestion(suggestedWord);
@@ -240,6 +241,11 @@ const KeyboardWrapper = () => {
     keyboard.current.setInput('');
   };
 
+  const onAfterPaste = clipboard => {
+    setInput(clipboard);
+    keyboard.current.setInput(clipboard);
+  }
+
   const onDwellTimeSliderChange = newDwellTimeMS => {
     setDwellTimeMS(newDwellTimeMS);
   }
@@ -299,6 +305,9 @@ const KeyboardWrapper = () => {
         <Clip
           string={input}
           onAfterClip={onAfterClip} />
+        <Paste
+          string={input} 
+          onAfterPaste={onAfterPaste} />
         <SliderWrapper
           onChange={onDwellTimeSliderChange} />
         <label htmlFor='eid' className={"eyetracking-toggle-label"}>Eyetracking</label>

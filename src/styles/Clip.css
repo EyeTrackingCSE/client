@@ -5,6 +5,7 @@
     transition: background-color 0.2s ease-out 0s;
     cursor: pointer;
     text-transform: uppercase;
+    margin-right: 15px;
 }
 
 .clip:focus {

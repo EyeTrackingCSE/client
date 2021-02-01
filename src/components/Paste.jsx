@@ -1,6 +1,6 @@
 import React from 'react';
 
-import "../styles/Paste.css";
+import "../styles/Clip.css";
 
 /**
  * Button that copies the users clipboard to props.string
@@ -13,9 +13,8 @@ const Paste = (props) => {
 
         navigator.clipboard.readText()
             .then(clipboard => {
-                props.string = clipboard;
                 if (props.onAfterPaste)
-                    props.onAfterPaste(props.string);
+                    props.onAfterPaste(clipboard);
             });
     }
 
