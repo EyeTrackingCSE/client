@@ -29,10 +29,10 @@ const WordSuggestions = forwardRef((props, ref) => {
     const blockMiddle = useRef();
     const blockRight = useRef();
 
-    const blockObject = {
-        blockLeft,
-        blockMiddle,
-        blockRight
+    const defaultBlockBindings = {
+        [defaults.DEFAULT_WORD_SUGGESTIONS[0]]: blockLeft,
+        [defaults.DEFAULT_WORD_SUGGESTIONS[1]]: blockMiddle,
+        [defaults.DEFAULT_WORD_SUGGESTIONS[2]]: blockRight,
     }
 
     /**
@@ -86,13 +86,22 @@ const WordSuggestions = forwardRef((props, ref) => {
          * @param {function} callback 
          */
         recurseButtons(callback) {
-            callback(blockLeft.current, 'blockLeft');
-            callback(blockMiddle.current, 'blockMiddle');
-            callback(blockRight.current, 'blockRight');
+            callback(blockLeft.current);
+            callback(blockMiddle.current);
+            callback(blockRight.current);
         },
 
-        getBlockById(id) {
-            return blockObject[id].current;
+        getBlockBySuggestion(s) {
+            if (defaults.DEFAULT_WORD_SUGGESTIONS[0].word == s)
+                return blockLeft.current;
+            
+            if (defaults.DEFAULT_WORD_SUGGESTIONS[1].word == s)
+                return blockMiddle.current;
+
+            if (defaults.DEFAULT_WORD_SUGGESTIONS[2].word == s)
+                return blockRight.current;
+
+            throw new Error(`Unexpected input. Got '${s}', expected one of ${defaults.DEFAULT_WORD_SUGGESTIONS}`);
         }
     }));
 
