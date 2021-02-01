@@ -1,6 +1,6 @@
 import React from 'react';
 
-import "../styles/Clip.css";
+import "../styles/Paste.css";
 
 /**
  * Button that copies the users clipboard to props.string
@@ -19,7 +19,7 @@ const Paste = (props) => {
     }
 
     return (
-        <div onClick={onPasteButtonClick} className={"clip"}>
+        <div onClick={onPasteButtonClick} className={"paste"}>
             Paste
         </div>
     );

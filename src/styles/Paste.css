@@ -1,4 +1,4 @@
-.clip {
+.paste {
     display: inline-block;
     color: #fff;
     white-space: nowrap;
@@ -8,7 +8,7 @@
     margin-right: 30px;
 }
 
-.clip:focus {
+.paste:focus {
     outline: none !important;
     border: 1px solid transparent;
 }
