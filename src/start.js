@@ -5,7 +5,6 @@ const { fork } = require('child_process');
 
 const {
     events,
-    status,
 } = require('./constants/index');
 
 let mainWindow

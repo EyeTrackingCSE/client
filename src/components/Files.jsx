@@ -1,16 +1,19 @@
 import React from 'react';
 import "../styles/Files.css";
+import {
+    events,
+} from "../constants/index";
 
-const { dialog } = require('electron').remote
+const { ipcRenderer } = window.require("electron");
 
 const Files = props => {
 
     const onSaveClick = e => {
-
+        ipcRenderer.send(events.SYNC_SAVE_FILE, props.string);
     };
 
     const onLoadClick = e => {
-
+        ipcRenderer.send(events.SYNC_LOAD_FILE, props.string);
     };
 
     return (
