@@ -4,6 +4,7 @@ import Keyboard from 'react-simple-keyboard';
 import Toggle from 'react-toggle';
 import Clip from './Clip';
 import Paste from './Paste';
+import Files from './Files';
 import SliderWrapper from './SliderWrapper';
 import WordSuggestions from './WordSuggestions';
 
@@ -246,6 +247,11 @@ const KeyboardWrapper = () => {
     keyboard.current.setInput(clipboard);
   }
 
+  const onFileLoad = content => {
+    setInput(content);
+    keyboard.current.setInput(content);
+  }
+
   const onDwellTimeSliderChange = newDwellTimeMS => {
     setDwellTimeMS(newDwellTimeMS);
   }
@@ -306,10 +312,16 @@ const KeyboardWrapper = () => {
           string={input}
           onAfterClip={onAfterClip} />
         <Paste
-          string={input} 
+          string={input}
           onAfterPaste={onAfterPaste} />
+
         <SliderWrapper
           onChange={onDwellTimeSliderChange} />
+
+        <Files
+          string={input}
+          onLoad={onFileLoad} />
+
         <label htmlFor='eid' className={"eyetracking-toggle-label"}>Eyetracking</label>
         <Toggle
           className={"eyetracking-toggle"}
