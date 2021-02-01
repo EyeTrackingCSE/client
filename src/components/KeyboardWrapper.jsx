@@ -247,6 +247,11 @@ const KeyboardWrapper = () => {
     keyboard.current.setInput(clipboard);
   }
 
+  const onFileLoad = content => {
+    setInput(content);
+    keyboard.current.setInput(content);
+  }
+
   const onDwellTimeSliderChange = newDwellTimeMS => {
     setDwellTimeMS(newDwellTimeMS);
   }
@@ -314,7 +319,8 @@ const KeyboardWrapper = () => {
           onChange={onDwellTimeSliderChange} />
 
         <Files
-          string={input} />
+          string={input}
+          onLoad={onFileLoad} />
 
         <label htmlFor='eid' className={"eyetracking-toggle-label"}>Eyetracking</label>
         <Toggle

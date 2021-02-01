@@ -14,5 +14,15 @@ ipcMain.on(events.SYNC_SAVE_FILE, (event, arg) => {
 });
 
 ipcMain.on(events.SYNC_LOAD_FILE, (event, arg) => {
-    dialog.showOpenDialogSync();
+    filenames = dialog.showOpenDialogSync();
+
+    if (filenames.length > 1) {
+        throw new Error("User selected too many files.");
+    }
+
+    let content = fs.readFileSync(filenames[0], { encoding: 'utf8', flag: 'r' });
+
+    console.log(`Read ${content} from ${filenames[0]}`);
+
+    event.reply(events.SYNC_FILE_CONTENT, content);
 });
