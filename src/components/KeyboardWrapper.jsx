@@ -309,9 +309,13 @@ const KeyboardWrapper = () => {
         <Paste
           string={input}
           onAfterPaste={onAfterPaste} />
+
         <SliderWrapper
           onChange={onDwellTimeSliderChange} />
-        <Files />
+
+        <Files
+          string={input} />
+
         <label htmlFor='eid' className={"eyetracking-toggle-label"}>Eyetracking</label>
         <Toggle
           className={"eyetracking-toggle"}

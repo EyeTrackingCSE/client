@@ -49,7 +49,10 @@ app.on('activate', () => {
     }
 })
 
+require('./ipc/files');
+
 /**
+ * TODO: Put this in its own file in /ipc/
  * Kicks off the tobii.listen() loop.
  * 
  * Each time the eyetracking recognizes a new focus event,

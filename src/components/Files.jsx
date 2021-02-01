@@ -17,7 +17,7 @@ const Files = props => {
     };
 
     return (
-        <div>
+        <div className={"file-wrapper"}>
             <div onClick={onSaveClick} className={"file-button"}>
                 Save
             </div>
