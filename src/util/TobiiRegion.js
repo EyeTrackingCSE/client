@@ -1,5 +1,10 @@
+const { types } = require('../constants/index')
+
 class TobiiRegion {
-    constructor(id, buttonElement) {
+    constructor(id, regionType, buttonElement) {
+        if (!types[regionType])
+            throw new Error(`Invalid TobiiRegion type, got regionType=${regionType}`);
+
         let block = buttonElement.getBoundingClientRect();
 
         this.id = id;
@@ -8,10 +13,8 @@ class TobiiRegion {
         this.y = block.y;
         this.width = block.width;
         this.height = block.height;
-    }
 
-    setKey(newValue) {
-        this.key = newValue;
+        this.type = regionType;
     }
 }
 

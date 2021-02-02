@@ -18,7 +18,8 @@ import "../styles/KeyboardWrapper.css";
 import {
   events,
   defaults,
-  specialkeys
+  specialkeys,
+  types
 } from "../constants/index";
 
 const { ipcRenderer } = window.require("electron");
@@ -49,15 +50,16 @@ const KeyboardWrapper = () => {
 
     // Add keyboard interaction regions
     keyboard.current.recurseButtons(buttonElement => {
-      rectangles.push(new TobiiRegion(rectangles.length, buttonElement))
+      rectangles.push(
+        new TobiiRegion(rectangles.length, types.KEYBOARD_KEY, buttonElement)
+      );
     });
 
     // Add Word suggestion regions
-    suggestions.current.recurseButtons((buttonElement, id) => {
-      let region = new TobiiRegion(rectangles.length, buttonElement);
-      region.setKey(id);
-
-      rectangles.push(region);
+    suggestions.current.recurseButtons(buttonElement => {
+      rectangles.push(
+        new TobiiRegion(rectangles.length, types.SUGGESTED_WORD_BLOCK, buttonElement)
+      );
     });
 
     let dimensions = {
@@ -80,27 +82,30 @@ const KeyboardWrapper = () => {
    * @param {string} keyPressed key pressed on virtual keyboard
    * @param {boolean} hasFocus true if the users gaze is focused on keyPressed
    */
-  const updateKeyboardStyles = (key, hasFocus) => {
+  const updateKeyboardStyles = (key, type, hasFocus) => {
     let cssClass = `hg-gaze${dwellTimeMS}`
 
-    // If the key is a WordSuggestions key.
-    if (key.includes('block')) {
-      let block = suggestions.current.getBlockById(key);
-
+    // If the key is a simple-keyboard key.
+    if (type === types.KEYBOARD_KEY) {
+      let cssSelector = specialkeys[key] ? specialkeys[key].id : key;
       if (hasFocus) {
+        keyboard.current.addButtonTheme(cssSelector, cssClass);
+      } else {
+        keyboard.current.removeButtonTheme(cssSelector, cssClass);
+      }
+      return;
+    }
+
+    // If the key is a WordSuggestions key.
+    if (type === types.SUGGESTED_WORD_BLOCK) {
+      let block = suggestions.current.getBlockBySuggestion(key);
+
+      if (block && hasFocus) {
         block.classList.add(cssClass);
       } else {
         block.classList.remove(cssClass);
       }
       return;
-    }
-
-    // If the key is a simple-keyboard key.
-    let cssSelector = specialkeys[key] ? specialkeys[key].id : key;
-    if (hasFocus) {
-      keyboard.current.addButtonTheme(cssSelector, cssClass);
-    } else {
-      keyboard.current.removeButtonTheme(cssSelector, cssClass);
     }
   }
 
@@ -132,15 +137,16 @@ const KeyboardWrapper = () => {
   const computeInputFromGaze = args => {
     let newInput = keyboard.current.getInput();
 
-    if (specialkeys[args.key]) {
-      newInput = specialkeys[args.key].fn(newInput);
+    if (args.type === types.KEYBOARD_KEY) {
+      if (specialkeys[args.key])
+        newInput = specialkeys[args.key].update(newInput);
+      else
+        newInput = newInput + args.key;
     }
-    else if (args.key.includes('block')) {
-      let suggestedWord = suggestions.current.getBlockById(args.key).innerText;
-      newInput = computeInputWithSuggestion(suggestedWord);
-    }
-    else {
-      newInput = newInput + args.key;
+
+    if (args.type === types.SUGGESTED_WORD_BLOCK) {
+      let block = suggestions.current.getBlockBySuggestion(args.key);
+      newInput = computeInputWithSuggestion(block.innerText);
     }
 
     return newInput;
@@ -155,7 +161,7 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
-    updateKeyboardStyles(args.key, args.hasFocus);
+    updateKeyboardStyles(args.key, args.type, args.hasFocus);
 
     let dwellTimeOfKey = computeDwellTime(args.key, args.timestamp);
     let keyAcceptedAsInput = dwellTimeOfKey >= dwellTimeMS;
