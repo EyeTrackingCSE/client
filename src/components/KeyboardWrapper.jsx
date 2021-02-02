@@ -139,7 +139,7 @@ const KeyboardWrapper = () => {
 
     if (args.type === types.KEYBOARD_KEY) {
       if (specialkeys[args.key])
-        newInput = specialkeys[args.key].fn(newInput);
+        newInput = specialkeys[args.key].update(newInput);
       else
         newInput = newInput + args.key;
     }

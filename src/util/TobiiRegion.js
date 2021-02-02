@@ -16,10 +16,6 @@ class TobiiRegion {
 
         this.type = regionType;
     }
-
-    setKey(newValue) {
-        this.key = newValue;
-    }
 }
 
 module.exports = TobiiRegion;
