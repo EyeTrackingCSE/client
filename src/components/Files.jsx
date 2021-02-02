@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import "../styles/Files.css";
 import {
     events,
@@ -6,6 +6,10 @@ import {
 
 const { ipcRenderer } = window.require("electron");
 
+/**
+ * Handles loading and saving files.
+ * @param {object} props 
+ */
 const Files = props => {
 
     const onSaveClick = e => {
@@ -20,12 +24,16 @@ const Files = props => {
     };
 
     const onFileLoad = (event, args) => {
-        console.log(args);
         if (props.onLoad) {
             props.onLoad(args);
         }
     }
 
+    /**
+     * Runs on init only once
+     * Attaches the SYNC_FILE_CONTENT event to ipc,
+     * so when a file is read, the stream is direction to onFileLoad()
+     */
     useEffect(() => {
         ipcRenderer.on(events.SYNC_FILE_CONTENT, onFileLoad);
     }, []);
