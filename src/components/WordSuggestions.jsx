@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useImperativeHandle, createRef, forwardRef, useRef } from 'react';
+import React, { useState, useEffect, useImperativeHandle, forwardRef, useRef } from 'react';
 import "../styles/WordSuggestions.css";
 import { defaults } from "../constants/index";
 
@@ -28,12 +28,6 @@ const WordSuggestions = forwardRef((props, ref) => {
     const blockLeft = useRef();
     const blockMiddle = useRef();
     const blockRight = useRef();
-
-    const defaultBlockBindings = {
-        [defaults.DEFAULT_WORD_SUGGESTIONS[0]]: blockLeft,
-        [defaults.DEFAULT_WORD_SUGGESTIONS[1]]: blockMiddle,
-        [defaults.DEFAULT_WORD_SUGGESTIONS[2]]: blockRight,
-    }
 
     /**
      * Extract the last word in a string.
@@ -91,14 +85,19 @@ const WordSuggestions = forwardRef((props, ref) => {
             callback(blockRight.current);
         },
 
+        /**
+         * Given the ID of a block, returns the ref of the corresponding block.
+         * s can only be one of [the, you, for]
+         * @param {string} s 
+         */
         getBlockBySuggestion(s) {
-            if (defaults.DEFAULT_WORD_SUGGESTIONS[0].word == s)
+            if (defaults.DEFAULT_WORD_SUGGESTIONS[0].word === s)
                 return blockLeft.current;
             
-            if (defaults.DEFAULT_WORD_SUGGESTIONS[1].word == s)
+            if (defaults.DEFAULT_WORD_SUGGESTIONS[1].word === s)
                 return blockMiddle.current;
 
-            if (defaults.DEFAULT_WORD_SUGGESTIONS[2].word == s)
+            if (defaults.DEFAULT_WORD_SUGGESTIONS[2].word === s)
                 return blockRight.current;
 
             throw new Error(`Unexpected input. Got '${s}', expected one of ${defaults.DEFAULT_WORD_SUGGESTIONS}`);

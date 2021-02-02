@@ -2,8 +2,14 @@ const { ipcMain, dialog } = require('electron');
 const fs = require('fs');
 
 const { events } = require('../constants/index');
+
+/**
+ * When the user wishes to save a file,
+ * open the windows save file dialog.
+ * 
+ * Save the string to the file
+ */
 ipcMain.on(events.SYNC_SAVE_FILE, (event, arg) => {
-    console.log(arg);
     let filename = dialog.showSaveDialogSync();
 
     let path = `${filename}.txt`;
@@ -13,6 +19,11 @@ ipcMain.on(events.SYNC_SAVE_FILE, (event, arg) => {
     fs.writeFileSync(filename, arg);
 });
 
+/**
+ * When the user wishes to load a file, open
+ * the windows open dialog and read the content. Send the
+ * content back over IPC.
+ */
 ipcMain.on(events.SYNC_LOAD_FILE, (event, arg) => {
     filenames = dialog.showOpenDialogSync();
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, createRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import Keyboard from 'react-simple-keyboard';
 import Toggle from 'react-toggle';
