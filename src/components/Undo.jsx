@@ -17,7 +17,6 @@ const Undo = (props) => {
 
     useEffect(() => {
         cache.update(props.string);
-        console.log(cache);
     }, [props.string])
 
     return (

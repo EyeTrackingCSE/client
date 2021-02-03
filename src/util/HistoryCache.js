@@ -29,7 +29,6 @@ class HistoryCache {
         if (newString.length === this.string.length)
             return;
 
-        console.log(`current '${this.string}', new '${newString}'`);
         let command, diff;
 
         if (newString.length < this.string.length) {
