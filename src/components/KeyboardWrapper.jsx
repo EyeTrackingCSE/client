@@ -7,6 +7,7 @@ import Paste from './Paste';
 import Files from './Files';
 import SliderWrapper from './SliderWrapper';
 import WordSuggestions from './WordSuggestions';
+import Undo from './Undo';
 
 import TobiiRegion from '../util/TobiiRegion';
 
@@ -258,6 +259,11 @@ const KeyboardWrapper = () => {
     keyboard.current.setInput(content);
   }
 
+  const onUndoClick = newString => {
+    setInput(newString);
+    keyboard.current.setInput(newString);
+  }
+
   const onDwellTimeSliderChange = newDwellTimeMS => {
     setDwellTimeMS(newDwellTimeMS);
   }
@@ -320,6 +326,11 @@ const KeyboardWrapper = () => {
         <Paste
           string={input}
           onAfterPaste={onAfterPaste} />
+
+        <Undo
+          string={input}
+          onUndoClick={onUndoClick}
+        />
 
         <SliderWrapper
           onChange={onDwellTimeSliderChange} />
