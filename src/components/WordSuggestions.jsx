@@ -10,6 +10,7 @@ const Block = forwardRef((props, ref) => {
         <div
             className={"block"}
             onClick={() => props.onBlockClick(props.word)}
+            title={props.title}
             ref={ref}>
             <span>
                 {props.word || ' '}
@@ -88,19 +89,17 @@ const WordSuggestions = forwardRef((props, ref) => {
         /**
          * Given the ID of a block, returns the ref of the corresponding block.
          * s can only be one of [the, you, for]
-         * @param {string} s 
+         * @param {string} title 
          */
-        getBlockBySuggestion(s) {
-            if (defaults.DEFAULT_WORD_SUGGESTIONS[0].word === s)
+        getBlockByTitle(title) {
+            if (title === blockLeft.current.title)
                 return blockLeft.current;
             
-            if (defaults.DEFAULT_WORD_SUGGESTIONS[1].word === s)
+            if (title === blockMiddle.current.title)
                 return blockMiddle.current;
 
-            if (defaults.DEFAULT_WORD_SUGGESTIONS[2].word === s)
+            if (title === blockRight.current.title)
                 return blockRight.current;
-
-            throw new Error(`Unexpected input. Got '${s}', expected one of ${defaults.DEFAULT_WORD_SUGGESTIONS}`);
         }
     }));
 
@@ -128,14 +127,17 @@ const WordSuggestions = forwardRef((props, ref) => {
             <Block
                 onBlockClick={props.onSuggestionClick}
                 ref={blockLeft}
+                title={'left'}
                 word={getWordAtIndex(suggestions, 0)} />
             <Block
                 onBlockClick={props.onSuggestionClick}
                 ref={blockMiddle}
+                title={'middle'}
                 word={getWordAtIndex(suggestions, 1)} />
             <Block
                 onBlockClick={props.onSuggestionClick}
                 ref={blockRight}
+                title={'right'}
                 word={getWordAtIndex(suggestions, 2)} />
         </div>
     );

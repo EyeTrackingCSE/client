@@ -13,7 +13,7 @@ class TobiiRegion {
         this.y = block.y;
         this.width = block.width;
         this.height = block.height;
-
+        this.title = buttonElement.title;
         this.type = regionType;
     }
 }

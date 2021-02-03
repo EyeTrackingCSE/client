@@ -83,7 +83,8 @@ const KeyboardWrapper = () => {
    * @param {string} keyPressed key pressed on virtual keyboard
    * @param {boolean} hasFocus true if the users gaze is focused on keyPressed
    */
-  const updateKeyboardStyles = (key, type, hasFocus) => {
+  const updateKeyboardStyles = (args) => {
+    let { key, type, hasFocus } = args;
     let cssClass = `hg-gaze${dwellTimeMS}`
 
     // If the key is a simple-keyboard key.
@@ -99,7 +100,7 @@ const KeyboardWrapper = () => {
 
     // If the key is a WordSuggestions key.
     if (type === types.SUGGESTED_WORD_BLOCK) {
-      let block = suggestions.current.getBlockBySuggestion(key);
+      let block = suggestions.current.getBlockByTitle(args.title);
 
       if (block && hasFocus) {
         block.classList.add(cssClass);
@@ -146,7 +147,7 @@ const KeyboardWrapper = () => {
     }
 
     if (args.type === types.SUGGESTED_WORD_BLOCK) {
-      let block = suggestions.current.getBlockBySuggestion(args.key);
+      let block = suggestions.current.getBlockByTitle(args.title);
       newInput = computeInputWithSuggestion(block.innerText);
     }
 
@@ -162,7 +163,7 @@ const KeyboardWrapper = () => {
    * @param {object} arg args to the ipc event
    */
   const onGazeFocusEvent = (event, args) => {
-    updateKeyboardStyles(args.key, args.type, args.hasFocus);
+    updateKeyboardStyles(args);
 
     let dwellTimeOfKey = computeDwellTime(args.key, args.timestamp);
     let keyAcceptedAsInput = dwellTimeOfKey >= dwellTimeMS;
@@ -310,10 +311,10 @@ const KeyboardWrapper = () => {
       startGazeFocusEventListener();
     } else {
       keyboard.current.recurseButtons(buttonElement =>
-        updateKeyboardStyles(buttonElement.innerText, false));
-      suggestions.current.recurseButtons((buttonElement, id) => {
-        updateKeyboardStyles(id, false);
-      });
+        updateKeyboardStyles({ key: buttonElement.innerText, type: types.KEYBOARD_KEY, hasFocus: false }));
+
+      suggestions.current.recurseButtons((buttonElement) =>
+        updateKeyboardStyles({ key: buttonElement.innerText, type: types.SUGGESTED_WORD_BLOCK, hasFocus: false, title: buttonElement.title }));
     }
   }, [eyetrackingIsOn, dwellTimeMS])
 
