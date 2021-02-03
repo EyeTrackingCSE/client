@@ -23,6 +23,13 @@ class HistoryCache {
      * @param {string} newString 
      */
     update(newString) {
+        if (newString.length === 0)
+            return;
+
+        if (newString.length === this.string.length)
+            return;
+
+        console.log(`current '${this.string}', new '${newString}'`);
         let command, diff;
 
         if (newString.length < this.string.length) {
@@ -51,7 +58,8 @@ class HistoryCache {
         let newString = '';
 
         if (last.command === INSERT) {
-            newString = this.string.slice(0, -1);
+            // newString = this.string.slice(0, -1);
+            newString = this.string.replace(last.diff, '');
         } else {
             newString = this.string + last.diff;
         }
