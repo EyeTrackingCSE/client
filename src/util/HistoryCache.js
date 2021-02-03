@@ -1,36 +1,48 @@
-const INSERT = 0;
-const DELETE = 1;
+const INSERT = 'I';
+const DELETE = 'D';
 
 class Update {
-    constructor(command, char) {
+    constructor(command, diff) {
         this.command = command;
-        this.char = char;
+        this.diff = diff;
     }
 }
 
+/**
+ * Keeps a change log of the a string.
+ */
 class HistoryCache {
     constructor(string) {
         this.string = string;
         this.history = [new Update(INSERT, string)];
     }
 
+    /**
+     * When string gets updated, the update needs to
+     * be communicated with the cache through update()
+     * @param {string} newString 
+     */
     update(newString) {
-        let diff = newString.replace(this.string, '');
+        let command, diff;
 
-        let command;
-        let char;
-        if (diff === newString) {
+        if (newString.length < this.string.length) {
             command = DELETE;
-            char = this.string.replace(newString, '');
+            diff = this.string.replace(newString, '');
         } else {
             command = INSERT;
-            char = diff;
+            diff = newString.replace(this.string, '');
         }
 
-        this.history.push(new Update(command, char));
+        this.history.push(new Update(command, diff));
         this.string = newString;
     }
 
+    /**
+     * Undoes the most recent operation
+     * done to the string.
+     * 
+     * Returns the updated string
+     */
     undo() {
         if (this.history.length === 0)
             return '';
@@ -41,7 +53,12 @@ class HistoryCache {
         if (last.command === INSERT) {
             newString = this.string.slice(0, -1);
         } else {
-            newString = this.string + last.change;
+            newString = this.string + last.diff;
         }
+
+        this.string = newString;
+        return newString;
     }
-}
+};
+
+module.exports = HistoryCache;
