@@ -1,6 +1,6 @@
 # Eyetracking Client
 
-![alt text](./media/helloworld2.gif)
+![alt text](./media/helloworld3.gif)
 
 ## About
 
