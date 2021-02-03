@@ -54,18 +54,23 @@ class HistoryCache {
         if (this.history.length === 0)
             return '';
 
-        let last = this.history.pop();
-        let newString = '';
+        this.history.pop();
 
-        if (last.command === INSERT) {
-            // newString = this.string.slice(0, -1);
-            newString = this.string.replace(last.diff, '');
-        } else {
-            newString = this.string + last.diff;
+        this.string = this.generate();
+        return this.string;
+    }
+
+    generate() {
+        let str = '';
+        for (let i = 0; i < this.history.length; i++) {
+            let cur = this.history[i];
+            if (cur.command === INSERT) {
+                str += cur.diff;
+            } else {
+                str = str.replace(cur.diff, '');
+            }
         }
-
-        this.string = newString;
-        return newString;
+        return str;
     }
 };
 
