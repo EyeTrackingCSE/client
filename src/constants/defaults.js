@@ -38,5 +38,5 @@ module.exports = {
 
     DEFAULT_TOBII_EXPERIENCE_PATH: "c:\\Program Files (x86)\\Tobii",
 
-    DEFAULT_RECALIBRATE_TIMER: 5000
+    DEFAULT_RECALIBRATE_TIMER: 30000
 }
