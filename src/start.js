@@ -48,3 +48,4 @@ app.on('activate', () => {
  */
 require('./ipc/files');
 require('./ipc/eyetracking');
+require('./ipc/calibrate');

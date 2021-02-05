@@ -8,6 +8,7 @@ import Files from './Files';
 import SliderWrapper from './SliderWrapper';
 import WordSuggestions from './WordSuggestions';
 import Undo from './Undo';
+import Calibrate from './Calibrate';
 
 import TobiiRegion from '../util/TobiiRegion';
 
@@ -335,6 +336,8 @@ const KeyboardWrapper = () => {
 
         <SliderWrapper
           onChange={onDwellTimeSliderChange} />
+
+        <Calibrate />
 
         <Files
           string={input}
