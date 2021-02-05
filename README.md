@@ -4,7 +4,7 @@
 
 ## About
 
-This app leverages our custom [eyetracking](https://github.com/EyeTrackingCSE/eyetracking) module to bind a Tobii eyetracking to a virtual keyboard, enabling the user to type using their eyes.
+This app leverages our custom [eyetracking](https://github.com/EyeTrackingCSE/eyetracking) module to bind a Tobii eyetracking device to a virtual keyboard, enabling the user to type using their eyes.
 
 The app is built using [React.js](https://reactjs.org/) and [Electron.js](https://www.electronjs.org/). The [eyetracking](https://github.com/EyeTrackingCSE/eyetracking) module is implemented as a [node-gyp C++ addon](https://nodejs.org/api/addons.html).
 
