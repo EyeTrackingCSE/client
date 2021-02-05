@@ -41,3 +41,5 @@ class TobiiEyetracker {
         });
     };
 }
+
+module.exports = TobiiEyetracker;
