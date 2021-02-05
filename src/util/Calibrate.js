@@ -3,7 +3,7 @@ const { exec } = require("child_process");
 
 const { defaults } = require('../constants/index');
 
-class TobiiEyetracker {
+class Calibrate {
     static calibrate(basePath) {
         let base = (basePath) ? basePath : defaults.DEFAULT_TOBII_EXPERIENCE_PATH;
         if (!fs.existsSync(base)) {
@@ -17,13 +17,9 @@ class TobiiEyetracker {
 
         let command = `"${path}" -Q`;
         exec(command, (error, stdout, stderr) => {
-            if (error) {
-                console.error(error.message);
-            }
-
             console.log(`Calibrate successful`);
         });
     };
 }
 
-module.exports = TobiiEyetracker;
+module.exports = Calibrate;
