@@ -5,7 +5,7 @@
     transition: background-color 0.2s ease-out 0s;
     cursor: pointer;
     text-transform: uppercase;
-    margin-right: 30px;
+    /* margin-right: 30px; */
 }
 
 .undo:focus {

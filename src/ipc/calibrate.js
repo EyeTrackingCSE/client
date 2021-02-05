@@ -1,7 +1,7 @@
 const { ipcMain } = require('electron');
 const { events } = require('../constants/index');
 
-const TobiiEyetracker = require('../util/TobiiEyetracker');
+const Calibrate = require('../util/Calibrate');
 
 // let eyetracking = new TobiiEyetracker();
 
@@ -10,7 +10,5 @@ const TobiiEyetracker = require('../util/TobiiEyetracker');
  * this function is called to do so.
  */
 ipcMain.on(events.CALIBRATE_TOBII_EYETRACKER, (event, arg) => {
-    TobiiEyetracker.calibrate();
-    // eyetracking.calibrate();
-    // event.returnValue = eyetracking.numCalibrations;
+    Calibrate.calibrate();
 });
