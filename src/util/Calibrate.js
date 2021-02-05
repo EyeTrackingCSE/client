@@ -17,7 +17,10 @@ class Calibrate {
 
         let command = `"${path}" -Q`;
         exec(command, (error, stdout, stderr) => {
-            console.log(`Calibrate successful`);
+            if (error)
+                console.log(error.message)
+            else
+                console.log(`Calibrate successful`);
         });
     };
 }

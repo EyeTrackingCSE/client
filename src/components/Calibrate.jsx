@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "../styles/Calibrate.css";
 import {
     events,
@@ -15,6 +15,11 @@ const Calibrate = props => {
     const onCalibrateClick = e => {
         ipcRenderer.send(events.CALIBRATE_TOBII_EYETRACKER, 1);
     };
+
+    useEffect(() => {
+        ipcRenderer.removeAllListeners(events.CALIBRATE_TOBII_WHEN_IDLE);
+        ipcRenderer.send(events.CALIBRATE_TOBII_WHEN_IDLE, {width: window.innerWidth, height: window.innerHeight});
+    }, [])
 
     return (
         <div onClick={onCalibrateClick} className={"cal"}>
