@@ -34,5 +34,7 @@ module.exports = {
         { word: 'the', score: 0 },
         { word: 'you', score: 0 },
         { word: 'for', score: 0 },
-    ]
+    ],
+
+    DEFAULT_TOBII_EXPERIENCE_PATH: "c:\\Program Files (x86)\\Tobii\\"
 }

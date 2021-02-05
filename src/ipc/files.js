@@ -12,6 +12,9 @@ const { events } = require('../constants/index');
 ipcMain.on(events.SYNC_SAVE_FILE, (event, arg) => {
     let filename = dialog.showSaveDialogSync();
 
+    if (!filename.length)
+        return;
+
     let path = `${filename}.txt`;
 
     // Write arg to filename
