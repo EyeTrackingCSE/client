@@ -36,5 +36,7 @@ module.exports = {
         { word: 'for', score: 0 },
     ],
 
-    DEFAULT_TOBII_EXPERIENCE_PATH: "c:\\Program Files (x86)\\Tobii\\"
+    DEFAULT_TOBII_EXPERIENCE_PATH: "c:\\Program Files (x86)\\Tobii",
+
+    DEFAULT_RECALIBRATE_TIMER: 5000
 }
