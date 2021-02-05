@@ -30,7 +30,7 @@ ipcMain.on(events.ASYNC_LISTEN, (event, arg) => {
     });
 
     console.log(`Forking ${PROCESS_NAME} process (${eyetrackingProcess.pid || 'no pid found'})`);
-    console.log(`(${eyetrackingProcess.pid}): w${arg.width} h${arg.height} r${arg.rectangles.length}`);
+    console.log(`pid (${eyetrackingProcess.pid}): width = ${arg.width} height = ${arg.height} rectangles = ${arg.rectangles.length}`);
 
     // Send the screen metadata to start the listen loop.
     eyetrackingProcess.send(arg);
