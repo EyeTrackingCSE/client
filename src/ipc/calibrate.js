@@ -10,6 +10,7 @@ let eyetracking = new TobiiEyetracker();
  * this function is called to do so.
  */
 ipcMain.on(events.CALIBRATE_TOBII_EYETRACKER, (event, arg) => {
+    console.log(arg);
     eyetracking.calibrate();
     event.returnValue = eyetracking.numCalibrations;
 });
