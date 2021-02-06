@@ -3,7 +3,7 @@ import React from 'react';
 import "../styles/TextToSpeech.css";
 
 /**
- * 
+ * On click, say the string stored in props.string
  * @param {object} props 
  */
 const TextToSpeech = (props) => {

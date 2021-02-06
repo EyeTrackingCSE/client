@@ -23,9 +23,6 @@ class HistoryCache {
      * @param {string} newString 
      */
     update(newString) {
-        if (newString.length === 0)
-            return;
-
         if (newString.length === this.string.length)
             return;
 
