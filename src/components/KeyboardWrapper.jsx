@@ -9,6 +9,7 @@ import SliderWrapper from './SliderWrapper';
 import WordSuggestions from './WordSuggestions';
 import Undo from './Undo';
 import Calibrate from './Calibrate';
+import TextToSpeech from './TextToSpeech';
 
 import TobiiRegion from '../util/TobiiRegion';
 
@@ -338,6 +339,9 @@ const KeyboardWrapper = () => {
           onChange={onDwellTimeSliderChange} />
 
         <Calibrate />
+
+        <TextToSpeech
+          string={input} />
 
         <Files
           string={input}
