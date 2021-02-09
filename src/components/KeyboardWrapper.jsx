@@ -10,6 +10,7 @@ import WordSuggestions from './WordSuggestions';
 import Undo from './Undo';
 import Calibrate from './Calibrate';
 import TextToSpeech from './TextToSpeech';
+import Print from './Print';
 
 import TobiiRegion from '../util/TobiiRegion';
 
@@ -342,6 +343,8 @@ const KeyboardWrapper = () => {
 
         <TextToSpeech
           string={input} />
+
+        <Print />
 
         <Files
           string={input}

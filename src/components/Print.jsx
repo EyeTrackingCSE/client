@@ -12,10 +12,10 @@ const Print = (props) => {
     }
 
     return (
-        <div onClick={onPrintButtonClick} className={"clip"}>
+        <div onClick={onPrintButtonClick} className={"print"}>
             Print
         </div>
     );
 };
 
-export default Clip;
+export default Print;
