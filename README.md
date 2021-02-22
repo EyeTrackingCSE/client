@@ -40,3 +40,5 @@ If you have an eyetracking device, you need to rebuild the [eyetracking](https:/
 - [Project Charter](./documentation/project_charter.pdf)
 - [Architectural Design Specification](./documentation/architectural_design_specification.pdf)
 - [System Requirments Specification](./documentation/system_requirements_specification.pdf)
+- [Detailed Design Specification](./documentation/dds.pdf)
+
