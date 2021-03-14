@@ -48,7 +48,7 @@ module.exports = {
             '{shift} z x c v b n m , . / {shift}',
             '.com @ {space}'
         ],
-        'shift': [
+        'default-shift': [
             '~ ! @ # $ % ^ & * ( ) _ + {bksp}',
             '{tab} Q W E R T Y U I O P { } |',
             '{lock} A S D F G H J K L : " {enter}',

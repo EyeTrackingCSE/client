@@ -211,7 +211,14 @@ const KeyboardWrapper = () => {
    * Swaps keyboard to shift mode or vice-versa.
    */
   const handleShift = () => {
-    const newLayout = layout === "default" ? "shift" : "default";
+    const currentlyShifted = (layout.includes('-shift'))
+
+    let newLayout = '';
+    if (currentlyShifted)
+      newLayout = layout.split('-')[0]
+    else
+      newLayout = `${layout}-shift`;
+
     setLayout(newLayout);
   };
 
@@ -372,7 +379,7 @@ const KeyboardWrapper = () => {
         className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}
         layout={defaults.DEFAULT_LAYOUTS}
-        layoutName={'dvorak-shift'}
+        layoutName={layout}
         onChange={onChange}
         onKeyPress={onKeyPress}
         physicalKeyboardHighlight={true}
