@@ -372,7 +372,7 @@ const KeyboardWrapper = () => {
         className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}
         layout={defaults.DEFAULT_LAYOUTS}
-        layoutName={layout}
+        layoutName={'dvorak-shift'}
         onChange={onChange}
         onKeyPress={onKeyPress}
         physicalKeyboardHighlight={true}
