@@ -209,8 +209,6 @@ const KeyboardWrapper = () => {
 
   /**
    * Swaps keyboard to shift mode or vice-versa.
-   * 
-   * Doesn't actually work at the moment, hitting shift does nothing
    */
   const handleShift = () => {
     const newLayout = layout === "default" ? "shift" : "default";
