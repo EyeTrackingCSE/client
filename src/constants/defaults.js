@@ -54,6 +54,13 @@ module.exports = {
             '{lock} A S D F G H J K L : " {enter}',
             '{shift} Z X C V B N M < > ? {shift}',
             '.com @ {space}'
+        ],
+        'dvorak': [
+            '~ 1 2 3 4 5 6 7 8 9 0 [ ] {bksp}',
+            '{tab} \' , . p y f g c r l / = \\',
+            '{lock} a o e u i d h t n s . {enter}',
+            '{shift} ; q j k x b m w v z {shift}',
+            '.com @ {space}'
         ]
     }
 }

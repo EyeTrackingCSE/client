@@ -371,6 +371,7 @@ const KeyboardWrapper = () => {
       <Keyboard
         className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}
+        layout={defaults.DEFAULT_LAYOUTS}
         layoutName={layout}
         onChange={onChange}
         onKeyPress={onKeyPress}
