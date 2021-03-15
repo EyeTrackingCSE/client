@@ -11,6 +11,7 @@ import Undo from './Undo';
 import Calibrate from './Calibrate';
 import TextToSpeech from './TextToSpeech';
 import Print from './Print';
+import SelectLayout from './SelectLayout';
 
 import TobiiRegion from '../util/TobiiRegion';
 
@@ -244,6 +245,10 @@ const KeyboardWrapper = () => {
     keyboard.current.setInput(input);
   }
 
+  const onLayoutChange = e => {
+    setLayout(e);
+  }
+
   /**
    * Called when the user toggles the checkbox to 
    * turn on/off eyetracking.
@@ -348,6 +353,11 @@ const KeyboardWrapper = () => {
 
         <TextToSpeech
           string={input} />
+
+        <SelectLayout
+          layout={layout}
+          onChange={onLayoutChange}
+        />
 
         <Print />
 
