@@ -1,0 +1,14 @@
+.dropdown-wrapper {
+    width: 100px;
+    display: inline-block;
+    margin-right: 30px;
+}
+
+
+/* Hacking CSS */
+
+.Dropdown-control {
+    overflow: inherit !important;
+    border: none !important;
+    padding: 0px 0px 0px 0px !important;
+}

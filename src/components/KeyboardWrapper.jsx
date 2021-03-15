@@ -11,6 +11,7 @@ import Undo from './Undo';
 import Calibrate from './Calibrate';
 import TextToSpeech from './TextToSpeech';
 import Print from './Print';
+import SelectLayout from './SelectLayout';
 
 import TobiiRegion from '../util/TobiiRegion';
 
@@ -209,11 +210,16 @@ const KeyboardWrapper = () => {
 
   /**
    * Swaps keyboard to shift mode or vice-versa.
-   * 
-   * Doesn't actually work at the moment, hitting shift does nothing
    */
   const handleShift = () => {
-    const newLayout = layout === "default" ? "shift" : "default";
+    const currentlyShifted = (layout.includes('-shift'))
+
+    let newLayout = '';
+    if (currentlyShifted)
+      newLayout = layout.split('-')[0]
+    else
+      newLayout = `${layout}-shift`;
+
     setLayout(newLayout);
   };
 
@@ -237,6 +243,10 @@ const KeyboardWrapper = () => {
     setInput(input);
 
     keyboard.current.setInput(input);
+  }
+
+  const onLayoutChange = e => {
+    setLayout(e.value);
   }
 
   /**
@@ -344,6 +354,11 @@ const KeyboardWrapper = () => {
         <TextToSpeech
           string={input} />
 
+        <SelectLayout
+          layout={layout}
+          onChange={onLayoutChange}
+        />
+
         <Print />
 
         <Files
@@ -373,6 +388,7 @@ const KeyboardWrapper = () => {
       <Keyboard
         className={"simple-keyboard"}
         keyboardRef={r => (keyboard.current = r)}
+        layout={defaults.DEFAULT_LAYOUTS}
         layoutName={layout}
         onChange={onChange}
         onKeyPress={onKeyPress}
