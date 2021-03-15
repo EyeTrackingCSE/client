@@ -95,10 +95,10 @@ module.exports = {
     }),
 
     SUPPORTED_LAYOUTS: [
-        { label: "QWERTY", value: "default" },
-        { label: "DVORAK", value: "dvorak" },
+        { label: "qwerty", value: "default" },
+        { label: "dvorak", value: "dvorak" },
         { label: "Arabic", value: "arabic" },
-        { label: "Hindi", value: "assamese" },
+        { label: "Assamese", value: "assamese" },
         { label: "Belarusian", value: "belarusian" },
         { label: "Bengali", value: "bengali" },
         { label: "Burmese", value: "burmese" },

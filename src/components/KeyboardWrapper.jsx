@@ -246,7 +246,7 @@ const KeyboardWrapper = () => {
   }
 
   const onLayoutChange = e => {
-    setLayout(e);
+    setLayout(e.value);
   }
 
   /**
