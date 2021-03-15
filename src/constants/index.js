@@ -8,8 +8,3 @@ module.exports = {
     specialkeys: require('./special-keys'),
     types: require('./types')
 };
-
-let a = require('./defaults');
-
-console.log(a.DEFAULT_LAYOUTS['default']);
-console.log(a.DEFAULT_LAYOUTS.default);
