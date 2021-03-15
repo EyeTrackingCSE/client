@@ -92,5 +92,41 @@ module.exports = {
             else
                 return layout.get(lay).default
         }
-    })
+    }),
+
+    SUPPORTED_LAYOUTS: [
+        { label: "QWERTY", value: "default" },
+        { label: "DVORAK", value: "dvorak" },
+        { label: "Arabic", value: "arabic" },
+        { label: "Hindi", value: "assamese" },
+        { label: "Belarusian", value: "belarusian" },
+        { label: "Bengali", value: "bengali" },
+        { label: "Burmese", value: "burmese" },
+        { label: "Chinese", value: "chinese" },
+        { label: "Czech", value: "czech" },
+        { label: "Farsi", value: "farsi" },
+        { label: "French", value: "french" },
+        { label: "Georgian", value: "georgian" },
+        { label: "German", value: "german" },
+        { label: "Gilaki", value: "gilaki" },
+        { label: "Greek", value: "greek" },
+        { label: "Hebrew", value: "hebrew" },
+        { label: "Hindi", value: "hindi" },
+        { label: "Italian", value: "italian" },
+        { label: "Japanese", value: "japanese" },
+        { label: "Kannada", value: "kannada" },
+        { label: "Korean", value: "korean" },
+        { label: "Nigerian", value: "nigerian" },
+        { label: "Norwegian", value: "norwegian" },
+        { label: "Polish", value: "polish" },
+        { label: "Russian", value: "russian" },
+        { label: "Sindhi", value: "sindhi" },
+        { label: "Spanish", value: "spanish" },
+        { label: "Swedish", value: "swedish" },
+        { label: "Thai", value: "thai" },
+        { label: "Turkish", value: "turkish" },
+        { label: "Ukrainian", value: "ukrainian" },
+        { label: "Urdu", value: "urdu" },
+        { label: "Uyghur", value: "Uyghur" },
+    ]
 }
