@@ -11,4 +11,5 @@ module.exports = {
 
 let a = require('./defaults');
 
-console.log(a.DEFAULT_LAYOUTS.hello);
+console.log(a.DEFAULT_LAYOUTS['default']);
+console.log(a.DEFAULT_LAYOUTS.default);

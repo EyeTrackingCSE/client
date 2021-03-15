@@ -74,55 +74,23 @@ module.exports = {
         ]
     }, {
         get: (target, prop, recv) => {
-            return prop;
+            let english = ['default', 'default-shift', 'dvorak', 'dvorak-shift']
+
+            if (english.includes(prop))
+                return Reflect.get(target, prop, recv);
+
+            let lay = prop.replace("-shift", '');
+            let needShifted = lay.length !== prop.length;
+
+            let ans = layout.get(lay);
+
+            if (!ans)
+                return Reflect.get(target, "default", recv)
+
+            if (needShifted)
+                return layout.get(lay).shift
+            else
+                return layout.get(lay).default
         }
-    }),
-
-    old: {
-        'default': [
-            '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',
-            '{tab} q w e r t y u i o p [ ] \\',
-            '{lock} a s d f g h j k l ; \' {enter}',
-            '{shift} z x c v b n m , . / {shift}',
-            '.com @ {space}'
-        ],
-        'default-shift': [
-            '~ ! @ # $ % ^ & * ( ) _ + {bksp}',
-            '{tab} Q W E R T Y U I O P { } |',
-            '{lock} A S D F G H J K L : " {enter}',
-            '{shift} Z X C V B N M < > ? {shift}',
-            '.com @ {space}'
-        ],
-        'dvorak': [
-            '~ 1 2 3 4 5 6 7 8 9 0 [ ] {bksp}',
-            '{tab} \' , . p y f g c r l / = \\',
-            '{lock} a o e u i d h t n s . {enter}',
-            '{shift} ; q j k x b m w v z {shift}',
-            '.com @ {space}'
-        ],
-        'dvorak-shift': [
-            "~ 1 2 3 4 5 6 7 8 9 0 [ ] {bksp}",
-            "{tab} ' , . P Y F G C R L / = \\",
-            "{lock} A O E U I D H T N S . {enter}",
-            "{shift} ; Q J K X B M W V Z {shift}",
-            ".com @ {space}"
-        ],
-        'arabic': layout.get('arabic').default,
-        'arabic-shift': layout.get('arabic').shift,
-
-        'assamese': layout.get('assamese').default,
-        'assamese-shift': layout.get('assamese').shift,
-
-        'belarusian': layout.get('belarusian').default,
-        'belarusian-shift': layout.get('belarusian').shift,
-
-        'bengali': layout.get('bengali').default,
-        'bengali-shift': layout.get('bengali').shift,
-
-        'burmese': layout.get('burmese').default,
-        'burmese-shift': layout.get('burmese').shift,
-
-        'chinese': layout.get('chinese').default,
-        'chinese-shift': layout.get('chinese').shift,
-    }
+    })
 }
