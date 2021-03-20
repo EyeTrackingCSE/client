@@ -43,6 +43,8 @@ module.exports = {
 
     DEFAULT_RECALIBRATE_TIMER: 30000,
 
+    DEFUALT_LAYOUT_STARTUP: "default",
+
     DEFAULT_LAYOUTS: new Proxy({
         'default': [
             '` 1 2 3 4 5 6 7 8 9 0 - = {bksp}',

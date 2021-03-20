@@ -31,7 +31,7 @@ const { ipcRenderer } = window.require("electron");
 
 const KeyboardWrapper = () => {
   const [input, setInput] = useState("");
-  const [layout, setLayout] = useState("default");
+  const [layout, setLayout] = useState(defaults.DEFUALT_LAYOUT_STARTUP);
   const [dwellTimeMS, setDwellTimeMS] = useState(defaults.DEFAULT_DWELL_TIME_MS);
   const [eyetrackingIsOn, setEyetrackingIsOn] = useState(defaults.DEFAULT_EYETRACKING_ON);
   const [gazeLog, setGazeLog] = useState({});
@@ -53,14 +53,14 @@ const KeyboardWrapper = () => {
 
     let rectangles = [];
 
-    // Add keyboard interaction regions
+    // No, I'm not going to put this in a loop. It would look terrible!
+
     keyboard.current.recurseButtons(buttonElement => {
       rectangles.push(
         new TobiiRegion(rectangles.length, types.KEYBOARD_KEY, buttonElement)
       );
     });
 
-    // Add Word suggestion regions
     suggestions.current.recurseButtons(buttonElement => {
       rectangles.push(
         new TobiiRegion(rectangles.length, types.SUGGESTED_WORD_BLOCK, buttonElement)
@@ -161,8 +161,9 @@ const KeyboardWrapper = () => {
   /**
    * Called when the user looks at a key.
    * 
-   * 
-   * TODO: Make this function neater.
+   * 1. Update keyboard CSS
+   * 2. Calculate dwell time of args.key
+   * 3. If dwell time is long enough, update working string
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
@@ -180,15 +181,16 @@ const KeyboardWrapper = () => {
     }
   }
 
-  /* Extract the last 'word' in currentInput
-     Replace the instance of lastWord in suggestion with '' to get the remainder
-     
+  /* Updates the string when a word suggestiosn is clicked
+
+     Basically does set subtraction and concatenates the difference
+
      ex:
      currentInput = album by radio
      lastWord = radio
      suggestion = radiohead
      
-     trim = head
+     trim = radiohead - radio = head
      newInput = currentInput + trim = radio + head .   
   */
   const computeInputWithSuggestion = suggestion => {
@@ -200,16 +202,13 @@ const KeyboardWrapper = () => {
     return `${currentInput}${trim} `;
   }
 
-  /**
-   * Update input variable in state
-   * @param {string} input 
-   */
   const onChange = input => {
     setInput(input);
   };
 
   /**
-   * Swaps keyboard to shift mode or vice-versa.
+   * A shifted layout would have the -shift suffix.
+   * So for "dvorak", the shifted variant would be "dvorak-shifted"
    */
   const handleShift = () => {
     const currentlyShifted = (layout.includes('-shift'))
@@ -224,7 +223,7 @@ const KeyboardWrapper = () => {
   };
 
   /**
-   * Called when keyboard button is pressed. Check for shift or caps lock
+   * Called when keyboard button is pressed manually. Check for shift or caps lock
    * @param {string} button button pressed
    */
   const onKeyPress = button => {
@@ -249,11 +248,6 @@ const KeyboardWrapper = () => {
     setLayout(e.value);
   }
 
-  /**
-   * Called when the user toggles the checkbox to 
-   * turn on/off eyetracking.
-   * @param {object} event 
-   */
   const onEyeTrackingIsOnChange = event => {
     setEyetrackingIsOn(event.target.checked);
   }
@@ -333,6 +327,7 @@ const KeyboardWrapper = () => {
 
   return (
     <div className={"component-wrapper"}>
+      
       <div className={"settings-bar"}>
         <Clip
           string={input}
