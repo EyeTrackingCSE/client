@@ -161,8 +161,9 @@ const KeyboardWrapper = () => {
   /**
    * Called when the user looks at a key.
    * 
-   * 
-   * TODO: Make this function neater.
+   * 1. Update keyboard CSS
+   * 2. Calculate dwell time of args.key
+   * 3. If dwell time is long enough, update working string
    * @param {object} event event obj
    * @param {object} arg args to the ipc event
    */
@@ -180,9 +181,11 @@ const KeyboardWrapper = () => {
     }
   }
 
-  /* Extract the last 'word' in currentInput
-     Replace the instance of lastWord in suggestion with '' to get the remainder
-     
+  /* Updates the string when a word suggestiosn is clicked
+  
+     Basically does set subtraction and concatenates the difference
+     (which is confusing for even me as I write this comment)
+
      ex:
      currentInput = album by radio
      lastWord = radio
@@ -209,7 +212,8 @@ const KeyboardWrapper = () => {
   };
 
   /**
-   * Swaps keyboard to shift mode or vice-versa.
+   * A shifted layout would have the -shift suffix.
+   * So for "dvorak", the shifted variant would be "dvorak-shifted"
    */
   const handleShift = () => {
     const currentlyShifted = (layout.includes('-shift'))
@@ -224,7 +228,7 @@ const KeyboardWrapper = () => {
   };
 
   /**
-   * Called when keyboard button is pressed. Check for shift or caps lock
+   * Called when keyboard button is pressed manually. Check for shift or caps lock
    * @param {string} button button pressed
    */
   const onKeyPress = button => {
@@ -249,11 +253,6 @@ const KeyboardWrapper = () => {
     setLayout(e.value);
   }
 
-  /**
-   * Called when the user toggles the checkbox to 
-   * turn on/off eyetracking.
-   * @param {object} event 
-   */
   const onEyeTrackingIsOnChange = event => {
     setEyetrackingIsOn(event.target.checked);
   }
