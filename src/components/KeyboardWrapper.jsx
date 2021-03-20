@@ -31,7 +31,7 @@ const { ipcRenderer } = window.require("electron");
 
 const KeyboardWrapper = () => {
   const [input, setInput] = useState("");
-  const [layout, setLayout] = useState("default");
+  const [layout, setLayout] = useState(defaults.DEFUALT_LAYOUT_STARTUP);
   const [dwellTimeMS, setDwellTimeMS] = useState(defaults.DEFAULT_DWELL_TIME_MS);
   const [eyetrackingIsOn, setEyetrackingIsOn] = useState(defaults.DEFAULT_EYETRACKING_ON);
   const [gazeLog, setGazeLog] = useState({});
