@@ -53,14 +53,14 @@ const KeyboardWrapper = () => {
 
     let rectangles = [];
 
-    // Add keyboard interaction regions
+    // No, I'm not going to put this in a loop. It would look terrible!
+
     keyboard.current.recurseButtons(buttonElement => {
       rectangles.push(
         new TobiiRegion(rectangles.length, types.KEYBOARD_KEY, buttonElement)
       );
     });
 
-    // Add Word suggestion regions
     suggestions.current.recurseButtons(buttonElement => {
       rectangles.push(
         new TobiiRegion(rectangles.length, types.SUGGESTED_WORD_BLOCK, buttonElement)
@@ -182,16 +182,15 @@ const KeyboardWrapper = () => {
   }
 
   /* Updates the string when a word suggestiosn is clicked
-  
+
      Basically does set subtraction and concatenates the difference
-     (which is confusing for even me as I write this comment)
 
      ex:
      currentInput = album by radio
      lastWord = radio
      suggestion = radiohead
      
-     trim = head
+     trim = radiohead - radio = head
      newInput = currentInput + trim = radio + head .   
   */
   const computeInputWithSuggestion = suggestion => {
@@ -203,10 +202,6 @@ const KeyboardWrapper = () => {
     return `${currentInput}${trim} `;
   }
 
-  /**
-   * Update input variable in state
-   * @param {string} input 
-   */
   const onChange = input => {
     setInput(input);
   };
@@ -332,6 +327,7 @@ const KeyboardWrapper = () => {
 
   return (
     <div className={"component-wrapper"}>
+      
       <div className={"settings-bar"}>
         <Clip
           string={input}
