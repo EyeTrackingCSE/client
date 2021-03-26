@@ -37,6 +37,7 @@ If you have an eyetracking device, you need to rebuild the [eyetracking](https:/
 
 ## CSE 4317 Documentation 
 
+- [Video Presentation](https://www.youtube.com/watch?v=iR_qDEg4TU8)
 - [Project Charter](./documentation/project_charter.pdf)
 - [Architectural Design Specification](./documentation/architectural_design_specification.pdf)
 - [System Requirments Specification](./documentation/system_requirements_specification.pdf)
